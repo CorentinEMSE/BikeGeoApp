@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-
 public class PagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;
     final int PAGE_COUNT=3;
@@ -37,7 +36,8 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 ListFragment tab1 = ListFragment.newInstance(position+1);
                 return tab1;
             case 1:
-                MapFragment tab2 = new MapFragment();
+                Map2Fragment tab2 = new Map2Fragment();
+                //MapFragment mMapFragment= MapFragment.newInstance();
                 return tab2;
             case 2:
                 InfoFragment tab3 = new InfoFragment();
@@ -46,6 +46,17 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                 return null;
         }
     }
+
+
+//    public MapFragment getItem(int position) {
+//        switch (position) {
+//            case 1:
+//                MapFragment tab2 = MapFragment.newInstance();
+//                return tab2;
+//            default:
+//                return null;
+//        }
+//    }
 
     @Override
     public int getCount() {

@@ -34,7 +34,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                ListFragment tab1 = new ListFragment();
+                ListFragment tab1 = ListFragment.newInstance(position+1);
                 return tab1;
             case 1:
                 MapFragment tab2 = new MapFragment();

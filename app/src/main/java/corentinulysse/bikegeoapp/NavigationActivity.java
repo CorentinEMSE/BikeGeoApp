@@ -9,8 +9,21 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.android.volley.RequestQueue;
 
-public class NavigationActivity extends AppCompatActivity  {
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class NavigationActivity extends AppCompatActivity implements Interface {// extends AppCompatActivity  {
+
+    private static String URL = "http://opendata.paris.fr/explore/dataset/stations-velib-disponibilites-en-temps-reel/download/?format=geojson&timezone=Europe/Berlin";
+
+    private ArrayList<ListSample> list;//Entrée du SampleAdapter
+    private List<StationsVelib> stationDataReq;
+
+    private RequestQueue mRequestQueue;
+    private HttpRequest mHttpRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +49,7 @@ public class NavigationActivity extends AppCompatActivity  {
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        final PagerAdapter adapter = new PagerAdapter
-                (getSupportFragmentManager(), tabLayout.getTabCount());
+        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
 
@@ -58,6 +70,39 @@ public class NavigationActivity extends AppCompatActivity  {
 //
 //            }
 //        });
+
+        mRequestQueue =  VolleyQueue.getInstance(NavigationActivity.this);
+        mHttpRequest = new HttpRequest();
+
+        getHttpRequest().LaunchHttpRequest(mRequestQueue, NavigationActivity.this, URL);
+    }
+
+    public HttpRequest getHttpRequest() {
+        return mHttpRequest;
+    }
+
+    public void httpRequestReceived(boolean requestReceived){
+
+        if(requestReceived){
+            stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
+
+            if(!stationDataReq.isEmpty()) {//Si la liste des stations recup est non vide
+//                list = new ArrayList<>();
+//                for (StationsVelib station : stationDataReq){ // Parcours des stations de velib dans la list récupérée
+//                    ListSample item = new ListSample(
+//                            station.getStatus(),
+//                            station.getBike_stands(),
+//                            station.getAvailable_bike_stands(),
+//                            station.getAvailable_bikes(),
+//                            station.getAddress(),
+//                            station.getPosition());
+//
+//                    list.add(item);
+//                }
+
+            }
+        }
+        return;
     }
 
 //    @Override
@@ -97,4 +142,17 @@ public class NavigationActivity extends AppCompatActivity  {
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public List<StationsVelib> getStationList() {
+        return stationDataReq;
+    }
+
+    @Override
+    public void sendHttpRequestFromFragment() {
+        //if(mPermissionInternet == true) {
+            final NavigationActivity activity = this;
+            getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
+    }
+
+
 }

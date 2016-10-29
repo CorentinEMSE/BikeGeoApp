@@ -1,12 +1,18 @@
 package corentinulysse.bikegeoapp;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static corentinulysse.bikegeoapp.R.id.listView;
 
 
 /**
@@ -18,14 +24,18 @@ import android.widget.TextView;
  * create an instance of this fragment.
  */
 public class ListFragment extends Fragment {
-    public static final String ARG_PAGE = "ARG_PAGE";
 
+    public static final String ARG_PAGE = "ARG_PAGE";
+    private Interface mTunnel;
+    public static ListView mListView;
+    private List<StationsVelib> mDatalist;
+    private ArrayList<ListSample> list = new ArrayList<>();//Entrée du SampleAdapter
     private int mPage;
 
    private OnFragmentInteractionListener mListener;
 
     public ListFragment() {
-        // Required empty public constructor
+        //keep empty
     }
 
     /**
@@ -44,7 +54,6 @@ public class ListFragment extends Fragment {
         return fragment;
     }
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -57,11 +66,37 @@ public class ListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_list, container, false);
+
         View view = inflater.inflate(R.layout.fragment_list, container, false);
-        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
-        textView.setText("Ici sera la liste");
+//        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
+//        textView.setText("Ici sera la liste");
+        mListView = (ListView) view.findViewById(listView);
+
+        mDatalist = mTunnel.getStationList();
+            list = new ArrayList<>();
+//            for (StationsVelib station : mDatalist){ // Parcours des stations de velib dans la list récupérée
+//                ListSample item = new ListSample(
+//                        station.getStatus(),
+//                        station.getBike_stands(),
+//                        station.getAvailable_bike_stands(),
+//                        station.getAvailable_bikes(),
+//                        station.getAddress(),
+//                        station.getPosition());
+//
+//                list.add(item);
+//            }
+
+        ListSampleAdapter adapter= new ListSampleAdapter(getActivity(), list);
+        mListView.setAdapter(adapter);
+
         return view;
     }
+
+//    public void setA(ListSampleAdapter adapter) {
+//        listview.setAdapter(adapter);
+//    }
+
+
 
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
@@ -69,6 +104,18 @@ public class ListFragment extends Fragment {
 //            mListener.onFragmentInteraction(uri);
 //        }
 //    }
+
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+        mTunnel = (Interface) context;
+    }
+
+    public void onRefresh() {
+        mTunnel.sendHttpRequestFromFragment();
+    }
+
+
 
 //    @Override
 //    public void onAttach(Context context) {
@@ -101,4 +148,6 @@ public class ListFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

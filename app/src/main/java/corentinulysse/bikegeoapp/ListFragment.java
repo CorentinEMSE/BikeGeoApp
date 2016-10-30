@@ -1,6 +1,7 @@
 package corentinulysse.bikegeoapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,12 +30,12 @@ import static corentinulysse.bikegeoapp.R.id.listView;
 public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
-    private Interface mTunnel;
+    private Interface mTunnel;//Interface de communication
     public static ListView mListView;
-    private List<StationsVelib> mDatalist;
+    private List<StationsVelib> mDatalist;//Liste de station reçu de la requete depuis NavigationActivity
     private ArrayList<ListSample> list = new ArrayList<>();//Entrée du SampleAdapter
     private int mPage;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
     private OnFragmentInteractionListener mListener;
     private ListSampleAdapter mAdapter;
 
@@ -78,9 +79,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         clickList(mView);
         swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.f_n_swiperefresh);
 
-        mDatalist = mTunnel.getStationList();
-            list = new ArrayList<>();
-        if(!mDatalist.isEmpty()) {
+        mDatalist = mTunnel.getStationList();//Récupération de la liste de stations issue de la requete
+        list = new ArrayList<>();//Initialisation de list pour l'affichage
+        if(!mDatalist.isEmpty()) {//Si la liste n'est pas vide
             for (StationsVelib station : mDatalist) { // Parcours des stations de velib dans la list récupérée
                 ListSample item = new ListSample(
                         station.getStatus(),
@@ -100,27 +101,25 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mAdapter= new ListSampleAdapter(getActivity(), list);
         mListView.setAdapter(mAdapter);
 
-        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);//On rend disponible la fonction de rafraichissment
 
         return mView;
     }
 
-    public void clickList(View mView) {
+    public void clickList(View mView) {//Gestion du clic sur un item de la liste
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), DetailsActivity.class);
+                intent.putExtra("stationS", mDatalist.get(position));
 
-                Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
+                startActivity(intent);
             }
         });
     }
-
-//    public void setA(ListSampleAdapter adapter) {
-//        listview.setAdapter(adapter);
-//    }
-
-
 
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
@@ -134,34 +133,19 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         super.onAttach(context);
 
         try {
-            mTunnel = (Interface) context;
+            mTunnel = (Interface) context;//On créé l'interface pour partager les méthodes
         }
         catch(ClassCastException e){
             throw new ClassCastException((getActivity().toString()+"must implement HttpRequest"));
         }
     }
 
-    public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        mTunnel.sendHttpRequestFromFragment();
-        mAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
-
-
+    public void onRefresh() {//Fonction de rafraichissement quand on swipe vers le bas
+        swipeRefreshLayout.setRefreshing(true);//On lance l'animation
+        mTunnel.sendHttpRequestFromFragment();//On relance une requete http
+        mAdapter.notifyDataSetChanged();//On actualise l'adapter
+        swipeRefreshLayout.setRefreshing(false);//On stoppe l'animation
     }
-
-
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        if (context instanceof OnFragmentInteractionListener) {
-//            mListener = (OnFragmentInteractionListener) context;
-//        } else {
-//            throw new RuntimeException(context.toString()
-//                    + " must implement OnFragmentInteractionListener");
-//        }
-//    }
 
 //    @Override
 //    public void onDetach() {

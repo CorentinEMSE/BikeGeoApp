@@ -16,6 +16,8 @@ tools:context=".NavigationActivity">
         <ListView
             android:id="@+id/listView"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.ListView"
+            android:smoothScrollbar="false" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>

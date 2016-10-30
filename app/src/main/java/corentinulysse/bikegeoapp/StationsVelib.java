@@ -2,10 +2,11 @@ package corentinulysse.bikegeoapp;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 
-public class StationsVelib {
+public class StationsVelib implements Serializable {
 
     @SerializedName("name")
     private String name;

@@ -20,7 +20,6 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <LinearLayout
-        xmlns:uber="http://schemas.android.com/apk/res-auto"
         android:id="@+id/detail_linear1"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -108,18 +107,6 @@
             android:textStyle="normal|italic"
             android:textAlignment="center"
             android:textSize="18sp" />
-        <com.uber.sdk.android.rides.RideRequestButton
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            uber:ub__style="white"
-            android:textAlignment="center" />
-
-        <!--<Button-->
-            <!--android:text="Retour aux stations"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/a_d_bBack" />-->
-
 
     </LinearLayout>
     <LinearLayout

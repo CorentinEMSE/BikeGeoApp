@@ -9,7 +9,6 @@ public class StationsVelib {
 
     @SerializedName("name")
     private String name;
-
     @SerializedName("coordinates")
     private double[] coordinates;
     @SerializedName("status")
@@ -25,12 +24,17 @@ public class StationsVelib {
     @SerializedName("position")
     private double[] position;
 
+
     public StationsVelib() {
     }
 
-    public String getName(){return name;}
+    public String getName(){
+        return name;
+    }
 
-    public void setName(String name){this.name=name;}
+    public void setName(String name){
+        this.name=name;
+    }
 
     public String getStatus() {
         return status;
@@ -91,7 +95,8 @@ public class StationsVelib {
     @Override
     public String toString() {
         return "StationsVelib{" +
-                "coordinates=" + Arrays.toString(coordinates) +
+                "name='" + name + '\'' +
+                ", coordinates=" + Arrays.toString(coordinates) +
                 ", status='" + status + '\'' +
                 ", bike_stands=" + bike_stands +
                 ", available_bike_stands=" + available_bike_stands +
@@ -100,4 +105,5 @@ public class StationsVelib {
                 ", position=" + Arrays.toString(position) +
                 '}';
     }
+
 }

@@ -125,7 +125,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
             //TODO A voir si on ajoute un test sur l'unicité du marker
 
             //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
-            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Vélos disponibles : "+dataCourante.getAvailable_bikes()+" et support disponibles : "+dataCourante.getAvailable_bike_stands()));
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Velib' disponibles : "+dataCourante.getAvailable_bikes()+"etPlaces disponibles : "+dataCourante.getAvailable_bike_stands()));
 
         }
         mMessageChargement.setText("");

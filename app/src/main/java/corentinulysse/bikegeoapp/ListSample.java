@@ -1,6 +1,8 @@
 package corentinulysse.bikegeoapp;
 
 public class ListSample {
+
+    private String name = "Chatelet";
     private String status = "OPEN";
     private int bike_stands = 2;
     private int available_bike_stands = 2;
@@ -8,15 +10,19 @@ public class ListSample {
     private String address = "3 rue de Vouillé";
     private double[] position = {43.344, 2.403};
 
-    public ListSample(String status, int bike_stands, int available_bike_stands, int available_bikes, String address, double[] position) {
+    public ListSample(String status, int bike_stands, int available_bike_stands, int available_bikes, String name, double[] position) {
         this.status = status;
         this.bike_stands = bike_stands;
         this.available_bike_stands = available_bike_stands;
         this.available_bikes = available_bikes;
-        this.address = address;
+        this.name = name;
         this.position = position;
     }
 
+
+    public String getName() {
+        return name;
+    }
 
     public String getStatus() {
         return status;
@@ -40,6 +46,10 @@ public class ListSample {
 
     public double[] getPosition() {
         return position;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setStatus(String status) {

@@ -57,7 +57,7 @@ public class HttpRequest {
                             }
                             Log.d("StationsInFonction :", stationData.toString());
 
-                            Toast.makeText(activity, "Données recupérées", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "Données actualisées", Toast.LENGTH_SHORT).show();
                             activity.httpRequestReceived(true);//Envoi à l'activité la notification de la réception de la requete
                         }
                         catch (JSONException e){

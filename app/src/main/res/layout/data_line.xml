@@ -12,32 +12,36 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:text="Adresse"
+            android:text="Name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/a_n_address"
+            android:id="@+id/a_n_name"
             android:textStyle="normal|bold"
-            android:textColor="@color/colorPrimaryDark" />
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:text="Longitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/a_n_position_long"
-            android:textStyle="normal|italic" />
+            android:textStyle="normal|italic"
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:text="Latitude"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/a_n_position_lat"
-            android:textStyle="normal|italic" />
+            android:textStyle="normal|italic"
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:text="Nombre d'emplacements"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/a_n_bike_stands" />
+            android:id="@+id/a_n_bike_stands"
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
 
     <LinearLayout
@@ -65,7 +69,8 @@
                 android:textAlignment="textEnd"
                 android:height="32dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_marginBottom="10dp"
+                android:layout_marginRight="20dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -86,7 +91,8 @@
                 android:id="@+id/a_n_available_bike_stands"
                 android:textAlignment="textEnd"
                 android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp" />
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp" />
         </LinearLayout>
 
         <TextView

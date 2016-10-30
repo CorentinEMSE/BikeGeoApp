@@ -24,12 +24,13 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 
     private RequestQueue mRequestQueue;
     private HttpRequest mHttpRequest;
+    private boolean mFirstRequest = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
-
+        mFirstRequest = true;
         stationDataReq=new ArrayList<>();
 
 
@@ -38,7 +39,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 
         mHttpRequest.LaunchHttpRequest(mRequestQueue, NavigationActivity.this, URL);
 
-        stationDataReq=mHttpRequest.getStationList();
+        stationDataReq = mHttpRequest.getStationList();
 
 
 
@@ -69,24 +70,9 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 
     public void httpRequestReceived(boolean requestReceived){
 
-        if(requestReceived){
+        if(requestReceived) {
             stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
 
-            if(!stationDataReq.isEmpty()) {//Si la liste des stations recup est non vide
-//                list = new ArrayList<>();
-//                for (StationsVelib station : stationDataReq){ // Parcours des stations de velib dans la list récupérée
-//                    ListSample item = new ListSample(
-//                            station.getStatus(),
-//                            station.getBike_stands(),
-//                            station.getAvailable_bike_stands(),
-//                            station.getAvailable_bikes(),
-//                            station.getAddress(),
-//                            station.getPosition());
-//
-//                    list.add(item);
-//                }
-
-            }
             Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
 
@@ -98,17 +84,20 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 //        // Give the TabLayout the ViewPager
 //        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 //        tabLayout.setupWithViewPager(viewPager);
+            if (mFirstRequest) {
+                TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+                tabLayout.addTab(tabLayout.newTab());
+                tabLayout.addTab(tabLayout.newTab());
+                tabLayout.addTab(tabLayout.newTab());
+                tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-            tabLayout.addTab(tabLayout.newTab());
-            tabLayout.addTab(tabLayout.newTab());
-            tabLayout.addTab(tabLayout.newTab());
-            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+                final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+                final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
+                viewPager.setAdapter(adapter);
+                tabLayout.setupWithViewPager(viewPager);
 
-            final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-            final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
-            viewPager.setAdapter(adapter);
-            tabLayout.setupWithViewPager(viewPager);
+                mFirstRequest=false;
+            }
         }
         return;
     }
@@ -159,10 +148,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 
     @Override
     public void sendHttpRequestFromFragment() {
-        //if(mPermissionInternet == true) {
             final NavigationActivity activity = this;
             getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
     }
-
-
 }

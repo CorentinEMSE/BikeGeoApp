@@ -21,7 +21,7 @@ public class ListSampleAdapter extends ArrayAdapter<ListSample> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View itemView = LayoutInflater.from(getContext()).inflate(R.layout.data_line, parent, false);
-        TextView address = (TextView) itemView.findViewById(R.id.a_n_address);
+        TextView name = (TextView) itemView.findViewById(R.id.a_n_name);
         TextView position_long = (TextView) itemView.findViewById(R.id.a_n_position_long);
         TextView position_lat = (TextView) itemView.findViewById(R.id.a_n_position_lat);
         TextView status = (TextView) itemView.findViewById(R.id.a_n_status);
@@ -33,7 +33,7 @@ public class ListSampleAdapter extends ArrayAdapter<ListSample> {
 
         ListSample sampleData = getItem(position);
 
-        address.setText(sampleData.getAddress());
+        name.setText(sampleData.getName());
         position_long.setText("Longitude : " +sampleData.getPosition()[0]);
         position_lat.setText("Latitude : " +sampleData.getPosition()[1]);
 

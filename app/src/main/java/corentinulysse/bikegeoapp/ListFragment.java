@@ -4,10 +4,13 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +26,7 @@ import static corentinulysse.bikegeoapp.R.id.listView;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private Interface mTunnel;
@@ -31,8 +34,9 @@ public class ListFragment extends Fragment {
     private List<StationsVelib> mDatalist;
     private ArrayList<ListSample> list = new ArrayList<>();//Entrée du SampleAdapter
     private int mPage;
-
-   private OnFragmentInteractionListener mListener;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private OnFragmentInteractionListener mListener;
+    private ListSampleAdapter mAdapter;
 
     public ListFragment() {
         //keep empty
@@ -67,29 +71,49 @@ public class ListFragment extends Fragment {
         // Inflate the layout for this fragment
      //return inflater.inflate(R.layout.fragment_list, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View mView = inflater.inflate(R.layout.fragment_list, container, false);
 //        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
 //        textView.setText("Ici sera la liste");
-        mListView = (ListView) view.findViewById(listView);
+        mListView = (ListView) mView.findViewById(listView);
+        clickList(mView);
+        swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.f_n_swiperefresh);
 
         mDatalist = mTunnel.getStationList();
             list = new ArrayList<>();
-            for (StationsVelib station : mDatalist){ // Parcours des stations de velib dans la list récupérée
+        if(!mDatalist.isEmpty()) {
+            for (StationsVelib station : mDatalist) { // Parcours des stations de velib dans la list récupérée
                 ListSample item = new ListSample(
                         station.getStatus(),
                         station.getBike_stands(),
                         station.getAvailable_bike_stands(),
                         station.getAvailable_bikes(),
-                        station.getAddress(),
+                        station.getName(),
                         station.getPosition());
 
                 list.add(item);
             }
+        }
+        else {
+            Toast.makeText(getActivity(), "La liste récupérée est vide", Toast.LENGTH_SHORT).show();
+        }
 
-        ListSampleAdapter adapter= new ListSampleAdapter(getActivity(), list);
-        mListView.setAdapter(adapter);
+        mAdapter= new ListSampleAdapter(getActivity(), list);
+        mListView.setAdapter(mAdapter);
 
-        return view;
+        swipeRefreshLayout.setOnRefreshListener(this);
+
+        return mView;
+    }
+
+    public void clickList(View mView) {
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 //    public void setA(ListSampleAdapter adapter) {
@@ -118,7 +142,12 @@ public class ListFragment extends Fragment {
     }
 
     public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
         mTunnel.sendHttpRequestFromFragment();
+        mAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
+
+
     }
 
 

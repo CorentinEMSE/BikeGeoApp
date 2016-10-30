@@ -1,6 +1,7 @@
 package corentinulysse.bikegeoapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -37,7 +38,6 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
     private OnFragmentInteractionListener mListener;
     private ListSampleAdapter mAdapter;
-    private StationsVelib mStation;//station à transférer à l'activité DetailsActivity
 
     public ListFragment() {
         //keep empty
@@ -111,9 +111,12 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), DetailsActivity.class);
+                intent.putExtra("stationS", mDatalist.get(position));
 
-                Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
-
+                startActivity(intent);
             }
         });
     }
@@ -142,8 +145,6 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mTunnel.sendHttpRequestFromFragment();//On relance une requete http
         mAdapter.notifyDataSetChanged();//On actualise l'adapter
         swipeRefreshLayout.setRefreshing(false);//On stoppe l'animation
-
-
     }
 
 //    @Override

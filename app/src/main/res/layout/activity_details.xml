@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_details"
     android:layout_width="match_parent"
@@ -8,6 +9,98 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="corentinulysse.bikegeoapp.DetailActivity">
+    tools:context="corentinulysse.bikegeoapp.DetailsActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <TextView
+            android:text="Nom Station"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/a_d_name"
+            android:textStyle="normal|bold|italic"
+            android:textAlignment="center"
+            android:textSize="30sp" />
+
+        <TextView
+            android:text="Statut"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/a_d_status"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textStyle="normal|bold" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/velib"
+                android:id="@+id/a_d_velib"
+                android:layout_weight="0.44" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/borne"
+                android:id="@+id/a_d_borne"
+                android:layout_weight="0.44" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Velib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/a_d_available_bikes"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textSize="24sp"
+                android:textStyle="normal|bold" />
+
+            <TextView
+                android:text="Places"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/a_d_available_bike_stands"
+                android:layout_weight="1"
+                android:textStyle="normal|bold"
+                android:textSize="24sp"
+                android:textAlignment="center" />
+        </LinearLayout>
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.08" />
+
+        <TextView
+            android:text="Adresse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/a_d_address"
+            android:textStyle="normal|italic"
+            android:textAlignment="center"
+            android:textSize="18sp" />
+
+        <Button
+            android:text="Retour aux stations"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/a_d_bBack" />
+
+    </LinearLayout>
 </RelativeLayout>

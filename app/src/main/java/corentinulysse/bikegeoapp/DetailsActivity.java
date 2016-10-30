@@ -1,7 +1,9 @@
 package corentinulysse.bikegeoapp;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,15 +13,30 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class DetailsActivity extends AppCompatActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private StationsVelib mStation;
     private Menu mMenu;
+    private GoogleMap mGoogleMap;
+
+//    private ProgressBar mProgressBar;
+//    private TextView mMessageChargement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.details_toolbar);
         setSupportActionBar(toolbar);
@@ -103,4 +120,62 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        mGoogleMap = googleMap;
+        mGoogleMap = googleMap;
+
+        mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
+
+
+        //For showing a move to my location button
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            // return;
+        }
+
+//        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+//
+//        }
+        mGoogleMap.setMyLocationEnabled(true);
+
+
+        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+
+            LatLng latCourante = new LatLng(mStation.getPosition()[0], mStation.getPosition()[1]);
+
+            //TODO A voir si on ajoute un test sur l'unicité du marker
+
+            //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()).snippet("Velib' disponibles : " + mStation.getAvailable_bikes() + " et Places disponibles : " + mStation.getAvailable_bike_stands()));
+
+
+
+//        mMessageChargement.setText("");
+//        mProgressBar.setVisibility(View.GONE);
+
+        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(-34, 151);
+//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng gardanne=new LatLng(-43.45,5.4667);
+        //mGoogleMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(latCourante).zoom(15).build();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mTargetMarker));
+
+    }
 }

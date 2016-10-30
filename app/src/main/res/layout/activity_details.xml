@@ -20,9 +20,10 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <LinearLayout
+        android:id="@+id/detail_linear1"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:weightSum="1"
         android:layout_below="@+id/details_toolbar">
 
@@ -45,6 +46,7 @@
             android:textStyle="normal|bold" />
 
         <LinearLayout
+            android:id="@+id/detail_linear2"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -66,6 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/detail_linear3"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -105,11 +108,31 @@
             android:textAlignment="center"
             android:textSize="18sp" />
 
+
         <!--<Button-->
             <!--android:text="Retour aux stations"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:id="@+id/a_d_bBack" />-->
 
+
     </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_linear1"
+        >
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:map="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="16dp"
+        tools:context="com.example.corentin.myapplication.MapsActivity" />
+    </LinearLayout>
+
 </RelativeLayout>

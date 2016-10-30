@@ -25,6 +25,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.uber.sdk.android.core.UberSdk;
+import com.uber.sdk.core.auth.Scope;
+import com.uber.sdk.rides.client.SessionConfiguration;
+
+import java.util.Arrays;
 
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback, android.location.LocationListener {
 
@@ -49,6 +54,20 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        SessionConfiguration config = new SessionConfiguration.Builder()
+                // mandatory
+                .setClientId("L566nM9GJnhxv2pAo3HmNPScYAEYDEUg")
+                // required for enhanced button features
+                .setServerToken("7ghLT31UKki2L0vHT5SoFRVCktWjkf5_nyslUqw8")
+                // required for implicit grant authentication
+                .setRedirectUri("YOUR_REDIRECT_URI")
+                // required scope for Ride Request Widget features
+                .setScopes(Arrays.asList(Scope.RIDE_WIDGETS))
+                // optional: set Sandbox as operating environment
+                .setEnvironment(SessionConfiguration.Environment.SANDBOX)
+                .build();
+        UberSdk.initialize(config);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);

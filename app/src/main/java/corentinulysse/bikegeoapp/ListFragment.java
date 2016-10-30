@@ -12,6 +12,8 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
+import static corentinulysse.bikegeoapp.R.id.listView;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,31 +65,31 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-     return inflater.inflate(R.layout.fragment_list, container, false);
+     //return inflater.inflate(R.layout.fragment_list, container, false);
 
-        //View view = inflater.inflate(R.layout.fragment_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
 //        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
 //        textView.setText("Ici sera la liste");
-      // mListView = (ListView) view.findViewById(listView);
+        mListView = (ListView) view.findViewById(listView);
 
-       // mDatalist = mTunnel.getStationList();
-         //   list = new ArrayList<>();
-//            for (StationsVelib station : mDatalist){ // Parcours des stations de velib dans la list récupérée
-//                ListSample item = new ListSample(
-//                        station.getStatus(),
-//                        station.getBike_stands(),
-//                        station.getAvailable_bike_stands(),
-//                        station.getAvailable_bikes(),
-//                        station.getAddress(),
-//                        station.getPosition());
-//
-//                list.add(item);
-//            }
+        mDatalist = mTunnel.getStationList();
+            list = new ArrayList<>();
+            for (StationsVelib station : mDatalist){ // Parcours des stations de velib dans la list récupérée
+                ListSample item = new ListSample(
+                        station.getStatus(),
+                        station.getBike_stands(),
+                        station.getAvailable_bike_stands(),
+                        station.getAvailable_bikes(),
+                        station.getAddress(),
+                        station.getPosition());
 
-       // ListSampleAdapter adapter= new ListSampleAdapter(getActivity(), list);
-       // mListView.setAdapter(adapter);
+                list.add(item);
+            }
 
-       // return view;
+        ListSampleAdapter adapter= new ListSampleAdapter(getActivity(), list);
+        mListView.setAdapter(adapter);
+
+        return view;
     }
 
 //    public void setA(ListSampleAdapter adapter) {
@@ -106,7 +108,13 @@ public class ListFragment extends Fragment {
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
-        mTunnel = (Interface) context;
+
+        try {
+            mTunnel = (Interface) context;
+        }
+        catch(ClassCastException e){
+            throw new ClassCastException((getActivity().toString()+"must implement HttpRequest"));
+        }
     }
 
     public void onRefresh() {

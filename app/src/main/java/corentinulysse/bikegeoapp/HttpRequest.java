@@ -1,6 +1,5 @@
 package corentinulysse.bikegeoapp;
 
-import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -55,7 +54,7 @@ public class HttpRequest {
 
                                 getStationList().add(stationRecup); // Ajout de la station dans la liste des stations à afficher
                             }
-                            Log.d("StationsInFonction :", stationData.toString());
+                            //Log.d("StationsInFonction :", stationData.toString());
 
                             Toast.makeText(activity, "Données actualisées", Toast.LENGTH_SHORT).show();
                             activity.httpRequestReceived(true);//Envoi à l'activité la notification de la réception de la requete

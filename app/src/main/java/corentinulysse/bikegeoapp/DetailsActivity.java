@@ -1,5 +1,6 @@
 package corentinulysse.bikegeoapp;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -36,6 +37,8 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private double longitude;
     private double altitude;
     private float accuracy;
+
+
 
 
     private StationsVelib mStation;
@@ -108,10 +111,17 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_detail,menu);
-//        super.onCreateOptionsMenu(menu);
 
         mMenu=menu;
         MenuItem favoritesMenu = mMenu.findItem(R.id.detail_action_favorite);
+        final boolean isFavorite = FavoritesStations.isStationInFavorites(mStation,getApplicationContext());
+
+        if(isFavorite){
+            favoritesMenu.setIcon(R.drawable.ic_favorite_black_48dp);
+        }
+        else{
+            favoritesMenu.setIcon(R.drawable.ic_favorite_border_black_48dp);
+        }
 
 
         return super.onCreateOptionsMenu(menu);
@@ -125,8 +135,29 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                 return super.onOptionsItemSelected(item);
             case R.id.detail_action_settings:
                 //User chose the "Settings" item, show the app settings UI...
+                Intent intent = new Intent();
+                intent.setClass(DetailsActivity.this, FavoritesActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.detail_action_favorite:
+
+                final boolean isFavorite= FavoritesStations.isStationInFavorites(mStation,getApplicationContext());
+
+                if(isFavorite){
+                    //Remove Favorite
+                    FavoritesStations.removeFavorite(getApplicationContext(),mStation);
+                    item.setIcon(R.drawable.ic_favorite_border_black_48dp);
+
+                }
+                else{
+                    //Add Favorite
+                    FavoritesStations.addFavorite(getApplicationContext(),mStation);
+                    item.setIcon(R.drawable.ic_favorite_black_48dp);
+
+
+                }
+
+
                 //User chose the "Favorite" action, mark the current item as favorite...
                 return true;
             default: //If we got here, the user's action was not recognized.

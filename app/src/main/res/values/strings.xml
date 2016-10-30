@@ -4,7 +4,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_favorite">Favorite</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Favorites</string>
+    <string name="action_settingsfavorites">Remove All Favorites</string>
     <string name="Liste">Liste</string>
     <string name="Carte">Carte</string>
     <string name="Info">Info</string>

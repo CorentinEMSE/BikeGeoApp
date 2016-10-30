@@ -1,6 +1,7 @@
 package corentinulysse.bikegeoapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -161,6 +162,12 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         switch (item.getItemId()){
             case R.id.action_settings:
                 //User chose the "Settings" item, show the app settings UI...
+                Intent intent = new Intent();
+                intent.setClass(NavigationActivity.this, FavoritesActivity.class);
+//                intent.putExtra("stationS", mDatalist.get(position));
+
+                startActivity(intent);
+
                 return true;
 //            case R.id.action_favorite:
 //                //User chose the "Favorite" action, mark the current item as favorite...

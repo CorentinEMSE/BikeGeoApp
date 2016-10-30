@@ -1,27 +1,81 @@
 package corentinulysse.bikegeoapp;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.List;
+
 public class Map2Fragment extends Fragment implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+
+    private Interface mTunnel;
+
+    private List<StationsVelib> mDataListe;
+    private List<String> mMarkerUniciteListe; // sert a verifier l'unicite des markers affiches par nom de voie. Objectif : réduction du nombre de markers affiches
+
+
+    private int mTargetItem; //Index de l'item sur lequel la map est centrée par défaut
+    private LatLng mTargetMarker; //marker de l'item cible
+
+    private MapView mMapView;
+    private GoogleMap mGoogleMap;
+
+    private ProgressBar mProgressBar;
+    private TextView mMessageChargement;
+
+    public Map2Fragment() {
+
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-                return inflater.inflate(R.layout.fragment_map2, container, false);
+
+        View rootView = inflater.inflate(R.layout.fragment_map2, container, false);
+
+        mTargetItem = 0;
+        mDataListe = mTunnel.getStationList();
+
+
+        double[] tempInit = mDataListe.get(mTargetItem).getPosition();
+        mTargetMarker = new LatLng(tempInit[0], tempInit[1]);
+
+        // mMapView = (MapView)rootView.findViewById()
+
+        mMessageChargement = (TextView) rootView.findViewById(R.id.f_Map2Fragment_messageMapChargement);
+        mMessageChargement.setText("La carte est en cours de chargement ...");
+
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.f_Map2Fragment_progressBarMap);
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setProgress(0);
+        mProgressBar.setMax(mDataListe.size());
+
+        MapsInitializer.initialize(getActivity().getApplicationContext());
+
+
+        return rootView;
     }
+
+
+
 
 
     @Override
@@ -34,17 +88,73 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        mGoogleMap = googleMap;
+
+        //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+
+//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+
+
+//        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//            // TODO: Consider calling
+//            //    ActivityCompat#requestPermissions
+//            // here to request the missing permissions, and then overriding
+//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+//            //                                          int[] grantResults)
+//            // to handle the case where the user grants the permission. See the documentation
+//            // for ActivityCompat#requestPermissions for more details.
+//            return;
+//        }
+
+        //For showing a move to my location button
+//        mGoogleMap.setMyLocationEnabled(true);
+
+        for (StationsVelib dataCourante : mDataListe){
+            LatLng latCourante = new LatLng(dataCourante.getPosition()[0],dataCourante.getPosition()[1]);
+
+            //TODO A voir si on ajoute un test sur l'unicité du marker
+
+            //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Vélos disponibles : "+dataCourante.getAvailable_bikes()+" et support disponibles : "+dataCourante.getAvailable_bike_stands()));
+
+        }
+        mMessageChargement.setText("");
+        mProgressBar.setVisibility(View.GONE);
 
         // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        LatLng gardanne=new LatLng(-43.45,5.4667);
-        mMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(gardanne));
+//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng gardanne=new LatLng(-43.45,5.4667);
+        //mGoogleMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+       // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mTargetMarker));
     }
 
+    @Override
+    public void onAttach(Context context){
+        super.onAttach(context);
+
+        try {
+            mTunnel = (Interface) context;
+        }
+        catch(ClassCastException e){
+            throw new ClassCastException((getActivity().toString()+"must implement HttpRequest"));
+        }
+    }
 }
 
 
@@ -63,7 +173,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
 //import com.google.android.gms.maps.model.MarkerOptions;
 //
 //public class Map2Fragment extends Fragment implements OnMapReadyCallback {
-//    private GoogleMap mMap;
+//    private GoogleMap mGoogleMap;
 //    public static Map2Fragment newInstance() {
 //        Map2Fragment fragment = new Map2Fragment();
 //        return fragment;
@@ -93,11 +203,11 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
 //     */
 //    @Override
 //    public void onMapReady(GoogleMap googleMap) {
-//        mMap = googleMap;
+//        mGoogleMap = googleMap;
 //
 //        // Add a marker in Sydney and move the camera
 //        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 //    }
 //}

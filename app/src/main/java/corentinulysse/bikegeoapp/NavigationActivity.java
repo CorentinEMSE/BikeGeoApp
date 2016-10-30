@@ -30,28 +30,17 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        stationDataReq=new ArrayList<>();
 
-//        // Get the ViewPager and set it's PagerAdapter so that it can display items
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),
-//                NagivationActivity.this));
-//
-//        // Give the TabLayout the ViewPager
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-//        tabLayout.setupWithViewPager(viewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.addTab(tabLayout.newTab());
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        mRequestQueue =  VolleyQueue.getInstance(NavigationActivity.this);
+        mHttpRequest = new HttpRequest();
 
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
+        mHttpRequest.LaunchHttpRequest(mRequestQueue, NavigationActivity.this, URL);
+
+        stationDataReq=mHttpRequest.getStationList();
+
+
 
 //        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 //        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -71,10 +60,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 //            }
 //        });
 
-        mRequestQueue =  VolleyQueue.getInstance(NavigationActivity.this);
-        mHttpRequest = new HttpRequest();
 
-        getHttpRequest().LaunchHttpRequest(mRequestQueue, NavigationActivity.this, URL);
     }
 
     public HttpRequest getHttpRequest() {
@@ -101,6 +87,28 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
 //                }
 
             }
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+
+//        // Get the ViewPager and set it's PagerAdapter so that it can display items
+//        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+//        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),
+//                NagivationActivity.this));
+//
+//        // Give the TabLayout the ViewPager
+//        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+//        tabLayout.setupWithViewPager(viewPager);
+
+            TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+            tabLayout.addTab(tabLayout.newTab());
+            tabLayout.addTab(tabLayout.newTab());
+            tabLayout.addTab(tabLayout.newTab());
+            tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+            final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+            final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
+            viewPager.setAdapter(adapter);
+            tabLayout.setupWithViewPager(viewPager);
         }
         return;
     }
@@ -143,7 +151,9 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
         }
     }
 
+    @Override
     public List<StationsVelib> getStationList() {
+
         return stationDataReq;
     }
 

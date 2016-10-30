@@ -53,7 +53,7 @@ public class HttpRequest {
 
                                 StationsVelib stationRecup = gson.fromJson(properties, StationsVelib.class);
 
-                                getStationList().add(stationRecup); // Ajout de la station dans la liste des stations à afficher
+                                 getStationList().add(stationRecup); // Ajout de la station dans la liste des stations à afficher
                             }
                             Log.d("StationsInFonction :", stationData.toString());
 

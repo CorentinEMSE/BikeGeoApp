@@ -7,6 +7,9 @@ import java.util.Arrays;
 
 public class StationsVelib {
 
+    @SerializedName("name")
+    private String name;
+
     @SerializedName("coordinates")
     private double[] coordinates;
     @SerializedName("status")
@@ -24,6 +27,10 @@ public class StationsVelib {
 
     public StationsVelib() {
     }
+
+    public String getName(){return name;}
+
+    public void setName(String name){this.name=name;}
 
     public String getStatus() {
         return status;

@@ -12,8 +12,6 @@ import android.widget.ListView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static corentinulysse.bikegeoapp.R.id.listView;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -65,15 +63,15 @@ public class ListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_list, container, false);
+     return inflater.inflate(R.layout.fragment_list, container, false);
 
-        View view = inflater.inflate(R.layout.fragment_list, container, false);
+        //View view = inflater.inflate(R.layout.fragment_list, container, false);
 //        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
 //        textView.setText("Ici sera la liste");
-        mListView = (ListView) view.findViewById(listView);
+      // mListView = (ListView) view.findViewById(listView);
 
-        mDatalist = mTunnel.getStationList();
-            list = new ArrayList<>();
+       // mDatalist = mTunnel.getStationList();
+         //   list = new ArrayList<>();
 //            for (StationsVelib station : mDatalist){ // Parcours des stations de velib dans la list récupérée
 //                ListSample item = new ListSample(
 //                        station.getStatus(),
@@ -86,10 +84,10 @@ public class ListFragment extends Fragment {
 //                list.add(item);
 //            }
 
-        ListSampleAdapter adapter= new ListSampleAdapter(getActivity(), list);
-        mListView.setAdapter(adapter);
+       // ListSampleAdapter adapter= new ListSampleAdapter(getActivity(), list);
+       // mListView.setAdapter(adapter);
 
-        return view;
+       // return view;
     }
 
 //    public void setA(ListSampleAdapter adapter) {

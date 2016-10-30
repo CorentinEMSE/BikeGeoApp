@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
     private OnFragmentInteractionListener mListener;
     private ListSampleAdapter mAdapter;
+    private int i = 0;
 
     public ListFragment() {
         //keep empty
@@ -92,7 +94,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                         station.getPosition());
 
                 list.add(item);
+                i=i+1;
             }
+            Log.d("NombredeStations : ", ""+i);//Nombre de stations
         }
         else {
             Toast.makeText(getActivity(), "La liste récupérée est vide", Toast.LENGTH_SHORT).show();

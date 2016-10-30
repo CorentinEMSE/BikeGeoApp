@@ -312,4 +312,5 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
     }
+
 }

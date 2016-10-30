@@ -34,7 +34,7 @@
             android:id="@+id/a_d_name"
             android:textStyle="normal|bold|italic"
             android:textAlignment="center"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
         <TextView
             android:text="Statut"
@@ -49,7 +49,7 @@
             android:id="@+id/detail_linear2"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="39dp">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
                 android:id="@+id/a_d_available_bikes"
                 android:layout_weight="1"
                 android:textAlignment="center"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textStyle="normal|bold" />
 
             <TextView
@@ -90,7 +90,7 @@
                 android:id="@+id/a_d_available_bike_stands"
                 android:layout_weight="1"
                 android:textStyle="normal|bold"
-                android:textSize="24sp"
+                android:textSize="18sp"
                 android:textAlignment="center" />
         </LinearLayout>
 
@@ -107,14 +107,6 @@
             android:textStyle="normal|italic"
             android:textAlignment="center"
             android:textSize="18sp" />
-
-
-        <!--<Button-->
-            <!--android:text="Retour aux stations"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/a_d_bBack" />-->
-
 
     </LinearLayout>
     <LinearLayout

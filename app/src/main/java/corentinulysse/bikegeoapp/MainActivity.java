@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -16,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button mButtonNav = (Button) findViewById(R.id.a_m_bNav);
         Button mButtonYT = (Button) findViewById(R.id.a_m_bYT);
+        ImageView velibLogo = (ImageView) findViewById(R.id.a_d_velibLogo);
+        velibLogo.setImageResource(R.drawable.velib_logo);
 
         mButtonNav.setOnClickListener(new View.OnClickListener() {
             @Override

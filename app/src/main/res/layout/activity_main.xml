@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,18 +13,54 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="239dp"
+            app:srcCompat="@drawable/velib_logo"
+            android:id="@+id/a_d_velibLogo"
+            android:textAlignment="center"
+            android:layout_weight="0.69" />
 
         <Button
-            android:text="Navigation"
+            android:id="@+id/a_m_bYT"
+
+            android:text="Qu'est-ce qu'un Velib' ?"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/buttonshapeyt"
+            android:shadowColor="#000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:layout_marginTop="30dp"
+            android:freezesText="false" />
+
+        <Space
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/a_m_bNav" />
+            android:layout_weight="0.2"
+            android:elevation="10dp" />
 
         <Button
-            android:text="Youtube"
+            android:id="@+id/a_m_bNav"
+
+            android:text="Parcourir les stations"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/a_m_bYT" />
+            android:layout_height="60dp"
+            android:background="@drawable/buttonshapenav"
+            android:shadowColor="#000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            />
     </LinearLayout>
 </RelativeLayout>

@@ -75,11 +75,11 @@ public class DetailsActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu_detail,menu);
 //        super.onCreateOptionsMenu(menu);
 
         mMenu=menu;
-        MenuItem favoritesMenu = mMenu.findItem(R.id.action_favorite);
+        MenuItem favoritesMenu = mMenu.findItem(R.id.detail_action_favorite);
 
 
         return super.onCreateOptionsMenu(menu);
@@ -91,10 +91,10 @@ public class DetailsActivity extends AppCompatActivity {
             case android.R.id.home:
                 DetailsActivity.this.finish();
                 return super.onOptionsItemSelected(item);
-            case R.id.action_settings:
+            case R.id.detail_action_settings:
                 //User chose the "Settings" item, show the app settings UI...
                 return true;
-            case R.id.action_favorite:
+            case R.id.detail_action_favorite:
                 //User chose the "Favorite" action, mark the current item as favorite...
                 return true;
             default: //If we got here, the user's action was not recognized.

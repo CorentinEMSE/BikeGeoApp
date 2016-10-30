@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         Button mButtonNav = (Button) findViewById(R.id.a_m_bNav);
         Button mButtonYT = (Button) findViewById(R.id.a_m_bYT);
         ImageView velibLogo = (ImageView) findViewById(R.id.a_d_velibLogo);
-        velibLogo.setImageResource(R.drawable.velib_logo);
+        velibLogo.setImageResource(R.drawable.velib);
 
         mButtonNav.setOnClickListener(new View.OnClickListener() {
             @Override

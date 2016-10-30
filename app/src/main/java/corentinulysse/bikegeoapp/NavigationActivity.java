@@ -1,7 +1,12 @@
 package corentinulysse.bikegeoapp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -10,12 +15,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import com.android.volley.RequestQueue;
+import com.google.android.gms.location.LocationListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class NavigationActivity extends AppCompatActivity implements Interface {// extends AppCompatActivity  {
+public class NavigationActivity extends AppCompatActivity implements Interface, LocationListener {// extends AppCompatActivity  {
 
     private static String URL = "http://opendata.paris.fr/explore/dataset/stations-velib-disponibilites-en-temps-reel/download/?format=geojson&timezone=Europe/Berlin";
 
@@ -30,6 +36,33 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(this,new String[]{
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION},1
+                    );
+
+        }
+
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)==PackageManager.PERMISSION_GRANTED){
+
+        }
+        else
+        {
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.INTERNET},2 );
+        }
+
+
+
         mFirstRequest = true;
         stationDataReq=new ArrayList<>();
 
@@ -73,8 +106,6 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
         if(requestReceived) {
             stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
 
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
 
 //        // Get the ViewPager and set it's PagerAdapter so that it can display items
 //        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -150,5 +181,10 @@ public class NavigationActivity extends AppCompatActivity implements Interface {
     public void sendHttpRequestFromFragment() {
             final NavigationActivity activity = this;
             getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
     }
 }

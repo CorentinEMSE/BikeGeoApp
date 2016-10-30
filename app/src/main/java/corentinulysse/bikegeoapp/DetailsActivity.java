@@ -3,21 +3,31 @@ package corentinulysse.bikegeoapp;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class DetailsActivity extends AppCompatActivity {
 
     private StationsVelib mStation;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-        Button boutonBack = (Button) findViewById(R.id.a_d_bBack);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.details_toolbar);
+        setSupportActionBar(toolbar);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+//        Button boutonBack = (Button) findViewById(R.id.a_d_bBack);
 
         TextView name = (TextView) findViewById(R.id.a_d_name);
         TextView status = (TextView) findViewById(R.id.a_d_status);
@@ -32,12 +42,12 @@ public class DetailsActivity extends AppCompatActivity {
             mStation = (StationsVelib) getIntent().getSerializableExtra("stationS"); //Obtaining data
         }
         Log.d("Coucou : ", mStation.toString());
-        boutonBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DetailsActivity.this.finish();
-            }
-        });
+//        boutonBack.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                DetailsActivity.this.finish();
+//            }
+//        });
 
         //Nom
         name.setText(mStation.getName());
@@ -60,6 +70,37 @@ public class DetailsActivity extends AppCompatActivity {
         //Adresse de la station
         address.setText(mStation.getAddress());
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_detail,menu);
+//        super.onCreateOptionsMenu(menu);
+
+        mMenu=menu;
+        MenuItem favoritesMenu = mMenu.findItem(R.id.detail_action_favorite);
+
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case android.R.id.home:
+                DetailsActivity.this.finish();
+                return super.onOptionsItemSelected(item);
+            case R.id.detail_action_settings:
+                //User chose the "Settings" item, show the app settings UI...
+                return true;
+            case R.id.detail_action_favorite:
+                //User chose the "Favorite" action, mark the current item as favorite...
+                return true;
+            default: //If we got here, the user's action was not recognized.
+                //Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+        }
     }
 
 }

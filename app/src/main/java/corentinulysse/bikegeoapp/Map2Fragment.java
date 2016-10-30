@@ -1,19 +1,25 @@
 package corentinulysse.bikegeoapp;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -22,8 +28,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-public class Map2Fragment extends Fragment implements OnMapReadyCallback {
+import static android.content.Context.LOCATION_SERVICE;
+import static corentinulysse.bikegeoapp.R.id.map;
 
+public class Map2Fragment extends Fragment implements OnMapReadyCallback, android.location.LocationListener {
+
+    private LocationManager lm;
+    private LocationListener locationListener;
+
+    private double latitude;
+    private double longitude;
+    private double altitude;
+    private float accuracy;
 
     private Interface mTunnel;
 
@@ -68,27 +84,35 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
         mProgressBar.setProgress(0);
         mProgressBar.setMax(mDataListe.size());
 
-        MapsInitializer.initialize(getActivity().getApplicationContext());
+        //public final class MapsInitializer extends Object
+        // Use this class to initialize the Google Maps Android API if features need to be used before obtaining a map. It must be called because some classes such as BitmapDescriptorFactory and CameraUpdateFactory need to be initialized.
+        //If you are using MapFragment or MapView and have already obtained a (non-null) GoogleMap by calling getMapAsync() on either of these classes and waiting for the onMapReady(GoogleMap map) callback, then you do not need to worry about this class.
 
+        //MapsInitializer.initialize(getActivity().getApplicationContext());
+
+//        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+//        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,this);
 
         return rootView;
     }
-
-
-
 
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
+
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+
+        mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
 
         //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -117,17 +141,36 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
 //        }
 
         //For showing a move to my location button
-//        mGoogleMap.setMyLocationEnabled(true);
+        if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
 
-        for (StationsVelib dataCourante : mDataListe){
-            LatLng latCourante = new LatLng(dataCourante.getPosition()[0],dataCourante.getPosition()[1]);
+            // return;
+        }
+
+//        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+//
+//        }
+        mGoogleMap.setMyLocationEnabled(true);
+
+
+        mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+        for (StationsVelib dataCourante : mDataListe) {
+            LatLng latCourante = new LatLng(dataCourante.getPosition()[0], dataCourante.getPosition()[1]);
 
             //TODO A voir si on ajoute un test sur l'unicité du marker
 
             //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
-            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Velib' disponibles : "+dataCourante.getAvailable_bikes()+"etPlaces disponibles : "+dataCourante.getAvailable_bike_stands()));
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Velib' disponibles : " + dataCourante.getAvailable_bikes() + " et Places disponibles : " + dataCourante.getAvailable_bike_stands()));
 
         }
+
         mMessageChargement.setText("");
         mProgressBar.setVisibility(View.GONE);
 
@@ -141,21 +184,115 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback {
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-       // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mTargetMarker));
+        // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mTargetMarker));
     }
 
     @Override
-    public void onAttach(Context context){
+    public void onAttach(Context context) {
         super.onAttach(context);
 
         try {
             mTunnel = (Interface) context;
-        }
-        catch(ClassCastException e){
-            throw new ClassCastException((getActivity().toString()+"must implement HttpRequest"));
+        } catch (ClassCastException e) {
+            throw new ClassCastException((getActivity().toString() + "must implement HttpRequest"));
         }
     }
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        super.onResume();
+            lm = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
+        if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+//                return;
+            }
+        lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, (android.location.LocationListener) this);
+        if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
+        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, (android.location.LocationListener) this);
+
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+//            return;
+        }
+        lm.removeUpdates((android.location.LocationListener) this);
+    }
+
+    @Override
+    public void onProviderEnabled(String provider){
+        String msg = String.format(getResources().getString(R.string.provider_enabled), provider);
+        Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+
+    @Override
+    public void onProviderDisabled(String provider){
+        String msg = String.format(getResources().getString(R.string.provider_disabled), provider);
+        Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status,Bundle extras ){
+        String newStatus = "";
+        switch (status) {
+            case LocationProvider.OUT_OF_SERVICE:
+                newStatus = "OUT_OF_SERVICE";
+                break;
+            case LocationProvider.TEMPORARILY_UNAVAILABLE:
+                newStatus = "TEMPORARILY_UNAVAILABLE";
+                break;
+            case LocationProvider.AVAILABLE:
+                newStatus = "AVAILABLE";
+                break;
+        }
+
+        String msg = String.format(getResources().getString(R.string.provider_new_status), provider,newStatus);
+        Toast.makeText(this.getContext(), msg, Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        latitude = location.getLatitude();
+        longitude = location.getLongitude();
+        altitude = location.getAltitude();
+        accuracy = location.getAccuracy();
+
+        String msg = String.format(
+                getResources().getString(R.string.new_location), String.valueOf(latitude),
+                String.valueOf(longitude),String.valueOf(altitude), String.valueOf(accuracy));
+        Toast.makeText(this.getContext(), msg, Toast.LENGTH_LONG).show();
+
+    }
+
+
+
 }
+
 
 
 //import android.support.v4.app.Fragment;

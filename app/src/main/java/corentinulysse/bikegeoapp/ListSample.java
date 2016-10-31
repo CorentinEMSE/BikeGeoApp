@@ -1,5 +1,8 @@
 package corentinulysse.bikegeoapp;
 
+/**
+ * Classe Sample qui est utilisé par le SampleAdapter afin d'afficher les différents éléments voulu dans le ListView du ListFragment
+ */
 public class ListSample {
 
     private String name = "Chatelet";
@@ -10,6 +13,15 @@ public class ListSample {
     private String address = "3 rue de Vouillé";
     private double[] position = {43.344, 2.403};
 
+    /**
+     * Constructeur
+     * @param status ouvert ou fermé
+     * @param bike_stands nombre de supports total
+     * @param available_bike_stands nombre de supports disponibles
+     * @param available_bikes nombre de vélibs disponibles
+     * @param name nom de la station
+     * @param position coordonnées géographiques de la station
+     */
     public ListSample(String status, int bike_stands, int available_bike_stands, int available_bikes, String name, double[] position) {
         this.status = status;
         this.bike_stands = bike_stands;
@@ -19,6 +31,9 @@ public class ListSample {
         this.position = position;
     }
 
+    /*
+    Getter et Setter correspondant aux données privées de la classe
+     */
 
     public String getName() {
         return name;

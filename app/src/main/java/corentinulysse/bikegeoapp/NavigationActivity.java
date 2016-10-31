@@ -22,9 +22,15 @@ import com.google.android.gms.location.LocationListener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Activité qui gère les requetes http et les trois fragments affichant les informations concernant le traitement de ces requetes
+ */
+public class NavigationActivity extends AppCompatActivity implements Interface, LocationListener {
 
-public class NavigationActivity extends AppCompatActivity implements Interface, LocationListener {// extends AppCompatActivity  {
 
+    /*
+    Initialisations
+     */
     private static String URL = "http://opendata.paris.fr/explore/dataset/stations-velib-disponibilites-en-temps-reel/download/?format=geojson&timezone=Europe/Berlin";
 
     private ArrayList<ListSample> list;//Entrée du SampleAdapter
@@ -35,18 +41,28 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
     private boolean mFirstRequest = false;
     private PagerAdapter adapter = null;
 
+    /**
+     * A la création de l'activité
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
 
+        /*
+        Ajout de la toolbar
+         */
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
+        /**
+         * Demande des permissions internet et gps si nécessaire
+         */
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-        } else {
+        } else { //Ici GPS
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
                     Manifest.permission.ACCESS_COARSE_LOCATION}, 1
@@ -54,12 +70,15 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
 
         }
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) { //Ici internet
 
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 2);
         }
 
+        /*
+        Initialisations suite
+         */
 
         mFirstRequest = true;
         stationDataReq = new ArrayList<>();
@@ -68,7 +87,15 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         mRequestQueue = VolleyQueue.getInstance(NavigationActivity.this);
         mHttpRequest = new HttpRequest();
 
+        /*
+        Lancement de la premiere requete HTTP
+         */
+
         mHttpRequest.LaunchHttpRequest(mRequestQueue, NavigationActivity.this, URL);
+
+        /*
+        Réupération des données de la première requête
+         */
 
         stationDataReq = mHttpRequest.getStationList();
 
@@ -78,23 +105,33 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
 
     }
 
+    /**
+     * Méthode permettant de récupérer la requete http
+     * @return
+     */
     public HttpRequest getHttpRequest() {
         return mHttpRequest;
     }
 
+    /**
+     * Méthode appelée lorsque la requete est reçue par NavigationActivity
+     * @param requestReceived
+     */
     public void httpRequestReceived(boolean requestReceived) {
 
         if (requestReceived) {
 
             stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
-            refreshFavorites();
+            refreshFavorites(); //On met à jour les favoris aussi
 
             if (mFirstRequest == false) {
 
-                adapter.pagerAdapterHttpRequestReceived();
+                adapter.pagerAdapterHttpRequestReceived(); //On met à jour ListFragment en passant par son adapter si ce n'est pas la première requete (en cas de premiere requete c'est mis à jour dans la foulée)
             }
 
-
+    /*
+    Initialisation du TabLayout et du viewPager correspondant - Permet de passer d'un fragment à l'autre en faisant glisser l'écran
+     */
             if (mFirstRequest) {
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
                 tabLayout.addTab(tabLayout.newTab());
@@ -114,7 +151,11 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
     }
 
 
-
+    /**
+     * Création du menu/toolbar
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -122,10 +163,15 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Lorsqu'on clique sur un élément de la toolbar
+     * @param item sur lequel on clique
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_settings:
+            case R.id.action_settings: //Si l'utilisateur souhaite aller dans les favoris
                 //User chose the "Settings" item, show the app settings UI...
                 Intent intent = new Intent();
                 intent.setClass(NavigationActivity.this, FavoritesActivity.class);
@@ -141,33 +187,43 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         }
     }
 
+    /**
+     * Méthode permettant de récuperer la liste des stationsVelib de NavigationActivity
+     * @return la liste de stationsVelib
+     */
     @Override
     public List<StationsVelib> getStationList() {
 
         return stationDataReq;
     }
 
+    /**
+     * Permet de lancer une requete http depuis un fragment de navigationActivity
+     */
     @Override
     public void sendHttpRequestFromFragment() {
         final NavigationActivity activity = this;
         getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
     }
 
+
     @Override
     public void onLocationChanged(Location location) {
 
     }
 
-
+    /**
+     * Méthode permettant de rafraichir les favoris lorsque l'on veut rafraichir les données
+     */
     public void refreshFavorites() {
-        ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
-        List<StationsVelib> temp2 = getStationList();
-        FavoritesStations.removeAllFavorite(getApplicationContext());
+        ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext()); //On récupere les favoris dans une variable temporaire
+        List<StationsVelib> temp2 = getStationList(); //On récupere la nouvelle liste issue de la requete
+        FavoritesStations.removeAllFavorite(getApplicationContext()); //Suppression de tous les favoris
         if(temp!=null) {
             for (StationsVelib station : temp) {
                 for (int i = 0; i < temp2.size(); ++i) {
                     if (station.getName().equals(temp2.get(i).getName())) {
-                        FavoritesStations.addFavorite(getApplicationContext(), temp2.get(i));
+                        FavoritesStations.addFavorite(getApplicationContext(), temp2.get(i)); //On ajoute les favoris mis à jours à la place des anciens favoris
                     }
                 }
             }

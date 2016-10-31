@@ -21,21 +21,36 @@ import java.util.List;
  * Created by Ulysse on 27/10/2016.
  */
 
+/**
+ * Classe gérant les requêtes http issues de l'activité NavigationActivity
+ */
 public class HttpRequest {
 
     private List<StationsVelib> stationData;
 
+    /**
+     * Constructeur
+     */
     public HttpRequest() {
         this.stationData =  new ArrayList<>();
     }
 
 
+    /**
+     * Méthode lançant une requete HTTP grâce aux parametres :
+     * @param requestQueue file de requete
+     * @param activity activité NavigationActivity souhaitant la requete
+     * @param URL url de la requete
+     */
     public void LaunchHttpRequest(RequestQueue requestQueue, final NavigationActivity activity, String URL) {
 
 
-            stationData.clear(); // mise a jour de la liste si nouvelle requete effectuee
+            stationData.clear(); // mise a jour de la liste
 
 
+        /*
+        Requete Json
+         */
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
@@ -81,6 +96,10 @@ public class HttpRequest {
         requestQueue.add(jsObjRequest); // Lancement de la requete
     }
 
+    /**
+     * Obtenir la liste de stations de la classe HttpRequest
+     * @return La liste de stations
+     */
     public List<StationsVelib> getStationList() {
         return stationData;
     }

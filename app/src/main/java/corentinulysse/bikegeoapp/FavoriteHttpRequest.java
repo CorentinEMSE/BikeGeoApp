@@ -21,22 +21,39 @@ import java.util.List;
  * Created by Ulysse on 27/10/2016.
  */
 
+/**
+ * Classe gérant les requêtes http issues de l'activité FavoritesActivity
+ */
 public class FavoriteHttpRequest {
 
+    /*
+    Initialisations
+     */
     private List<StationsVelib> stationData;
 
+    /**
+     * Constructeur
+     */
     public FavoriteHttpRequest() {
         this.stationData =  new ArrayList<>();
     }
 
 
+    /**
+     * Méthode lancant la requete http avec comme parametre :
+     * @param requestQueue la file de requête
+     * @param activity la FavoritesActivity voulant cette requete
+     * @param URL url de la requete
+     */
     public void LaunchHttpRequest(RequestQueue requestQueue, final FavoritesActivity activity, String URL) {
 
 
-        stationData.clear(); // mise a jour de la liste si nouvelle requete effectuee
+        stationData.clear(); // mise a jour de la liste
 
 
-
+/*
+Requete Json
+ */
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
 
@@ -81,6 +98,10 @@ public class FavoriteHttpRequest {
         requestQueue.add(jsObjRequest); // Lancement de la requete
     }
 
+    /**
+     * Obtenir la liste de stations de la classe FavoritesHttpRequest
+     * @return La liste de stations
+     */
     public List<StationsVelib> getStationList() {
         return stationData;
     }

@@ -33,6 +33,9 @@ import java.util.List;
 import static android.content.Context.LOCATION_SERVICE;
 import static corentinulysse.bikegeoapp.R.id.map;
 
+/**
+ * Fragment gérant l'affichage des stations sur une googlemap
+ */
 public class Map2Fragment extends Fragment implements OnMapReadyCallback, android.location.LocationListener {
 
     private LocationManager lm;
@@ -59,13 +62,27 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
     private TextView mMessageChargement;
 
 
+    /**
+     * Constructeur
+     */
     public Map2Fragment() {
 
     }
 
 
+    /**
+     * Lorsque la vue est crée
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        /*
+        Initialisations
+         */
 
         View rootView = inflater.inflate(R.layout.fragment_map2, container, false);
 
@@ -77,6 +94,9 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         mTargetMarker = new LatLng(tempInit[0], tempInit[1]);
 
 
+        /*
+        Message et progressbar s'affichant pendant le chargement de la carte si nécessaire
+         */
 
         mMessageChargement = (TextView) rootView.findViewById(R.id.f_Map2Fragment_messageMapChargement);
         mMessageChargement.setText("La carte est en cours de chargement ...");
@@ -93,6 +113,11 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
     }
 
 
+    /**
+     * Lorsque la vue est crée on place un SupportMapFragment, soit une google map, dans notre fragment
+     * @param view
+     * @param savedInstanceState
+     */
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -103,23 +128,34 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     }
 
+    /**
+     * Lorsque la carte est prête
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
+
+        /*
+        Ajout du bouton de zoom et du compass indiquant le nord
+         */
 
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setCompassEnabled(true);
 
 
+    /**
+     * Ajout d'un listener afin de contrôler si l'utilisateur clique sur un marker, dans ce cas on ouvre une Details Activity
+     */
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 String name=marker.getTitle();
                 StationsVelib stationATransmettre=null;
-                for (int i = 0; i < mDataListe.size(); ++i) {
+                for (int i = 0; i < mDataListe.size(); ++i) { //Recherche de la station à transmettre dans la liste des stations grâce au nom du marker
                     StationsVelib temp=mDataListe.get(i);
                     if (name.equals(temp.getName())){
-                        stationATransmettre=temp;
+                        stationATransmettre=temp; //On a trouvé la station dont on veut des détails
                     }
                 }
                 if(stationATransmettre!=null) {
@@ -128,7 +164,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
                     intent.putExtra("stationS", stationATransmettre);
 
 
-                    startActivity(intent);
+                    startActivity(intent); //Ouverture de l'activity détails
                 }
             }
         });
@@ -147,7 +183,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        for (StationsVelib dataCourante : mDataListe) {
+        for (StationsVelib dataCourante : mDataListe) { //Ajout des markers correspondant à la liste
             LatLng latCourante = new LatLng(dataCourante.getPosition()[0], dataCourante.getPosition()[1]);
 
 
@@ -157,17 +193,26 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
         }
 
+        /*
+        On enleve les messages/progressbar de chargement
+         */
         mMessageChargement.setText("");
         mProgressBar.setVisibility(View.GONE);
 
 
-
+        /*
+        Mise à jour de la position caméra
+         */
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
     }
 
+    /**
+     * OnAttach, récupération du tunnel
+     * @param context
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -180,7 +225,9 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
     }
 
 
-
+    /**
+     * OnResume pour les mise à jour de localisation
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -197,6 +244,9 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     }
 
+    /**
+     * OnPause pour arreter les mises à jour de localisation
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -207,6 +257,10 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         lm.removeUpdates((android.location.LocationListener) this);
     }
 
+    /**
+     * Pour savoir si une connexion GPS ou Network est disponible
+     * @param provider Network ou GPS
+     */
     @Override
     public void onProviderEnabled(String provider){
         String msg = String.format(getResources().getString(R.string.provider_enabled), provider);
@@ -215,6 +269,10 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
     }
 
 
+    /**
+     * Pour savoir si une connexion GPS ou Network n'est plus disponible
+     * @param provider GPS ou Network
+     */
     @Override
     public void onProviderDisabled(String provider){
         String msg = String.format(getResources().getString(R.string.provider_disabled), provider);
@@ -222,6 +280,12 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     }
 
+    /**
+     * Si le status change
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
     public void onStatusChanged(String provider, int status,Bundle extras ){
         String newStatus = "";
@@ -242,6 +306,10 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     }
 
+    /**
+     * Si la localisation change
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();
@@ -256,6 +324,9 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     }
 
+    /**
+     * Lorsque l'on reçoit le résultat d'une requête http (demandée par listFragment par exemple), on modifie la map pour correspondre à cette mise à jour
+     */
     public void map2fragmentOnHttpRequestReceived(){
 
         manageFragment();
@@ -263,9 +334,13 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     }
 
+    /**
+     * Mise à jour de la map avec la nouvelle liste de stations mise à jour suite à la requete
+     */
     public void manageFragment(){
 
 
+        //On dit que la map change
         mMessageChargement.setText("La carte est en cours de chargement ...");
 
         mProgressBar.setVisibility(View.VISIBLE);
@@ -280,7 +355,11 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         double[] tempInit = mDataListe.get(mTargetItem).getPosition();
         mTargetMarker = new LatLng(tempInit[0], tempInit[1]);
 
-        mGoogleMap.clear();
+        mGoogleMap.clear(); //On enlève tous les précédents markers
+
+        /*
+        On ajoute les marker de chaque station vélib qui sont maintenant mis à jour
+         */
 
         for (StationsVelib dataCourante : mDataListe) {
             LatLng latCourante = new LatLng(dataCourante.getPosition()[0], dataCourante.getPosition()[1]);
@@ -290,11 +369,16 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
         }
 
+        /*
+        On indique que le chargment de la carte est terminé
+         */
         mMessageChargement.setText("");
         mProgressBar.setVisibility(View.GONE);
 
 
-
+    /*
+    On recentre la caméra sur le premier élément de la liste (donc le premier élément de listFragment aussi)
+     */
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 

@@ -6,7 +6,14 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 
+/**
+ * Classe stockant les stations de Vlib après la requête json
+ */
 public class StationsVelib implements Serializable {
+
+    /*
+    Données que l'on souhait conserver après la requete
+     */
 
     @SerializedName("name")
     private String name;
@@ -25,9 +32,16 @@ public class StationsVelib implements Serializable {
     @SerializedName("position")
     private double[] position;
 
-
+    /*
+    Constructeur
+     */
     public StationsVelib() {
     }
+
+
+    /*
+    Getters & Setters des données privées
+     */
 
     public String getName(){
         return name;

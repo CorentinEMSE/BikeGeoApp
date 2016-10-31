@@ -21,6 +21,9 @@ import java.util.List;
 
 import static corentinulysse.bikegeoapp.R.id.favorites_listView;
 
+/**
+ * Activité gérant l'affichage des stations favorites
+ */
 public class FavoritesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
 
     private static String URL = "http://opendata.paris.fr/explore/dataset/stations-velib-disponibilites-en-temps-reel/download/?format=geojson&timezone=Europe/Berlin";
@@ -41,37 +44,55 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
 
 
-//    private Interface mTunnel;
+
     private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
 
 
-
+    /**
+     * A la création de l'activité
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
 
-
+        /*
+        Récupération de la listview que l'on souhaite modifier dans le layout
+         */
         mListView = (ListView) findViewById(favorites_listView);
 
+        /*
+        Initialisation de la toolbar avec le bouton de retour
+         */
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.favorites_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        /*
+        Initialisation de la requête http correspondant aux favoris
+         */
         mRequestQueue = VolleyQueue.getInstance(FavoritesActivity.this);
         mHttpRequest = new FavoriteHttpRequest();
 
 
-
+        /*
+        Permet d'ajouter un listener pour surveiller le clic sur la liste
+         */
         clickList();
 
+        /*
+        Implémentation de l'outit de refresh
+         */
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.favorites_swiperefresh);
 
 
-
+        /*
+        Mise à jour de la listview
+         */
         manageFragment();
 
 
@@ -85,6 +106,9 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
     }
 
+    /**
+     * Gestion du clic sur un item de la liste pour lancer l'activité détail
+     */
     public void clickList() {//Gestion du clic sur un item de la liste
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -104,41 +128,56 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         });
     }
 
+    /**
+     * OnRefresh on initialise le swiperefreshlayout puis on fait une requête http
+     */
     @Override
     public void onRefresh() {
-        clickable=false;
+        clickable=false; //On n'autorise plus pendant le refresh à cliquer sur la lsite
         setSwipeRefreshLayoutTrue();
         mHttpRequest.LaunchHttpRequest(mRequestQueue, FavoritesActivity.this, URL);
 
 
     }
 
+    /**
+     * Méthode appelant le swiperefreshlayout
+     */
     public void setSwipeRefreshLayoutTrue(){
         swipeRefreshLayout.setRefreshing(true);//On lance l'animation
 
     }
 
+    /**
+     * Méthode enlevant le swiperefreshlayout
+     */
     public void setSwipeRefreshLayoutFalse(){
         swipeRefreshLayout.setRefreshing(false);//On stoppe l'animation
 
     }
 
 
-
+    /**
+     * Méthode appelée lorsque la requête http est reçue
+     * @param requestReceived
+     */
     public void httpRequestReceived(boolean requestReceived) {
 
         if (requestReceived) {
 
             stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
-            refreshFavorites();
-            manageFragment();
-            clickable=true;
+            refreshFavorites(); //On met à jour les favoris
+            manageFragment(); //On met à jour l'affichage de ceux-ci
+            clickable=true; //On autorise de nouveau le fait de pouvoir cliquer sur la liste
            setSwipeRefreshLayoutFalse();
 
         }
         return;
     }
 
+    /**
+     * Méthode permettant de mettre à jour les favoris, voir dans NavigationActivity la même méthode pour plus de commentaires
+     */
     public void refreshFavorites() {
         ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
         FavoritesStations.removeAllFavorite(getApplicationContext());
@@ -155,7 +194,9 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
     }
 
 
-
+    /**
+     * Méthode permettant de mettre à jour l'affichage des favoris
+     */
     public void manageFragment(){
         ArrayList<StationsVelib> list2 = FavoritesStations.getFavorites(getApplicationContext());
         mList = list2;
@@ -193,6 +234,11 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
     }
 
+    /**
+     * Méthode initialisant le menu (toolbar)
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -200,14 +246,19 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Méthode gérant l'appui sur un item de la toolbar par l'utilisateur
+     * @param item Soit retour à l'activité précédente, soit suppression de tous les favoris
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case android.R.id.home:
+            case android.R.id.home: //bouton retour à l'activité précédente
                 FavoritesActivity.this.finish();
                 return super.onOptionsItemSelected(item);
 
-            case R.id.action_settings:
+            case R.id.action_settings: //Option permettant de supprimer tous les favoris
                 FavoritesStations.removeAllFavorite(getApplicationContext());
                 manageFragment();
                 mAdapter.notifyDataSetChanged();

@@ -11,15 +11,32 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * Adapter permettant d'afficher des éléments ListSample dans une listView comme celle de ListFragment
+ */
 public class ListSampleAdapter extends ArrayAdapter<ListSample> {
 
-
+    /**
+     * Constructeur
+     * @param context
+     * @param statVelibs liste de stations déjà formatées par ListSample
+     */
     public ListSampleAdapter(Context context, List<ListSample> statVelibs) {
         super(context, 0, statVelibs);
     }
 
+    /**
+     * Obtenir la vue
+     * @param position dans la listview
+     * @param convertView
+     * @param parent
+     * @return
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        /*
+        On prend les éléments du data_line layout que l'on souhaite modifier
+         */
         View itemView = LayoutInflater.from(getContext()).inflate(R.layout.data_line, parent, false);
         TextView name = (TextView) itemView.findViewById(R.id.a_n_name);
         TextView position_long = (TextView) itemView.findViewById(R.id.a_n_position_long);
@@ -37,7 +54,7 @@ public class ListSampleAdapter extends ArrayAdapter<ListSample> {
         position_long.setText("Longitude : " +sampleData.getPosition()[0]);
         position_lat.setText("Latitude : " +sampleData.getPosition()[1]);
 
-        if (sampleData.getStatus().equals("OPEN")) {
+        if (sampleData.getStatus().equals("OPEN")) { //Suivant l'état de la station on l'affiche d'une couleur différente
             status.setTextColor(Color.parseColor("#04B404"));
             status.setText("OUVERTE");
         }
@@ -50,7 +67,7 @@ public class ListSampleAdapter extends ArrayAdapter<ListSample> {
             borne.setVisibility(View.GONE);
         }
 
-        if (sampleData.getAvailable_bike_stands()==0) {
+        if (sampleData.getAvailable_bike_stands()==0) { //On regarde s'il reste des places pour garer les vlibs
             available_bike_stands.setText("Plus de places...");
         }
         else {
@@ -58,7 +75,7 @@ public class ListSampleAdapter extends ArrayAdapter<ListSample> {
         }
         bike_stands.setText("Nombre d'emplacements: " +sampleData.getBike_stands());
 
-        if (sampleData.getAvailable_bikes()==0) {
+        if (sampleData.getAvailable_bikes()==0) { //On regarde s'il reste des vlibs
             available_bikes.setText("Aucun Velib'...");
         }
         else {

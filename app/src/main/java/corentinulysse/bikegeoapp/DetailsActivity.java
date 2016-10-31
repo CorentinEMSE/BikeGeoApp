@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,6 +26,9 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+/**
+ * Activité gérant l'affichage des détails d'une station : Des informations utiles ainsi qu'une carte n'affichant que cette station.
+ */
 public class DetailsActivity extends AppCompatActivity implements OnMapReadyCallback, android.location.LocationListener {
 
 
@@ -46,10 +48,16 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private GoogleMap mGoogleMap;
 
 
+    /**
+     * Executé à la création de l'activité
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
+
+        /*Initialisation des données */
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -57,6 +65,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         Toolbar toolbar = (Toolbar) findViewById(R.id.details_toolbar);
         setSupportActionBar(toolbar);
 
+        /*Ajoute la flèche de retour à l'activité précédente*/
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
@@ -70,11 +79,12 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         TextView available_bike_stands = (TextView) findViewById(R.id.a_d_available_bike_stands);
         TextView address = (TextView) findViewById(R.id.a_d_address);
 
+        /*Récupération des données*/
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mStation = (StationsVelib) getIntent().getSerializableExtra("stationS"); //Obtaining data
         }
-        Log.d("Coucou : ", mStation.toString());
+
 
 
         //Nom
@@ -100,6 +110,11 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    /**
+     * Initialisation du menu (toolbar)
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater = getMenuInflater();
@@ -109,7 +124,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         MenuItem favoritesMenu = mMenu.findItem(R.id.detail_action_favorite);
         final boolean isFavorite = FavoritesStations.isStationInFavorites(mStation,getApplicationContext());
 
-        if(isFavorite){
+        if(isFavorite){ //On met l'icone de la toolbar en noir si l'élément est déjà dans les favoris, en blanc sinon
             favoritesMenu.setIcon(R.drawable.ic_favorite_black_48dp);
         }
         else{
@@ -120,23 +135,28 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Executé quand on selectionne un élément de la toolbar
+     * @param item sur lequel on clique
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case android.R.id.home:
+            case android.R.id.home: //Bouton retour
                 DetailsActivity.this.finish();
                 return super.onOptionsItemSelected(item);
-            case R.id.detail_action_settings:
+            case R.id.detail_action_settings: //Accès aux favoris
                 //User chose the "Settings" item, show the app settings UI...
                 Intent intent = new Intent();
                 intent.setClass(DetailsActivity.this, FavoritesActivity.class);
                 startActivity(intent);
                 return true;
-            case R.id.detail_action_favorite:
+            case R.id.detail_action_favorite: //Mettre ou enlever la station des favoris
 
                 final boolean isFavorite= FavoritesStations.isStationInFavorites(mStation,getApplicationContext());
 
-                if(isFavorite){
+                if(isFavorite){ //Si c'est déjà dans les favoris on l'enlève, sinon on l'ajoute
                     //Remove Favorite
                     FavoritesStations.removeFavorite(getApplicationContext(),mStation);
                     item.setIcon(R.drawable.ic_favorite_border_black_48dp);
@@ -166,11 +186,21 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     }
 
 
+    /**
+     * Quand la carte est prête
+     * @param googleMap
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        /*
+        Initialisation des variables
+         */
         mGoogleMap = googleMap;
-        mGoogleMap = googleMap;
+
+        /*
+        Activation des boutons de zoom et du compas indiquant le nord
+         */
 
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
         mGoogleMap.getUiSettings().setCompassEnabled(true);
@@ -181,28 +211,36 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         }
 
-
         mGoogleMap.setMyLocationEnabled(true);
-
-
         mGoogleMap.getUiSettings().setMyLocationButtonEnabled(true);
 
 
-            LatLng latCourante = new LatLng(mStation.getPosition()[0], mStation.getPosition()[1]);
+        /*
+        Initialisation position de l'objet
+         */
+        LatLng latCourante = new LatLng(mStation.getPosition()[0], mStation.getPosition()[1]);
 
 
 
+        /*
+        Ajout du marker sur la map
+         */
+        mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()));
 
-            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()));
 
-
-
+        /*
+        Déplacement caméra
+         */
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latCourante).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
 
 
     }
+
+    /**
+     * OnResume : mise à jour de la localisation
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -219,6 +257,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    /**
+     * OnPause : on arrête les mise à jour de localisation
+     */
     @Override
     public void onPause() {
         super.onPause();
@@ -229,6 +270,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         lm.removeUpdates((android.location.LocationListener) this);
     }
 
+    /**
+     * Des qu'on active GPS ou Network, ça l'indique
+     * @param provider GPS ou Network
+     */
     @Override
     public void onProviderEnabled(String provider){
         String msg = String.format(getResources().getString(R.string.provider_enabled), provider);
@@ -236,7 +281,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
-
+    /**
+     * Des qu'on désactive GPS ou Network, ça l'indique
+     * @param provider GPS ou Network
+     */
     @Override
     public void onProviderDisabled(String provider){
         String msg = String.format(getResources().getString(R.string.provider_disabled), provider);
@@ -244,6 +292,12 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    /**
+     * Quand le status change
+     * @param provider
+     * @param status
+     * @param extras
+     */
     @Override
     public void onStatusChanged(String provider, int status,Bundle extras ){
         String newStatus = "";
@@ -264,6 +318,10 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
     }
 
+    /**
+     * Quand la localisation change
+     * @param location
+     */
     @Override
     public void onLocationChanged(Location location) {
         latitude = location.getLatitude();

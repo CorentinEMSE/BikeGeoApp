@@ -13,24 +13,37 @@ import java.util.List;
  * Created by Corentin on 30/10/2016.
  */
 
+/**
+ * Classe gérant les favoris grâce à SharedPreferences
+ */
 public class FavoritesStations {
+    /*
+    Initialisations
+     */
 
     public static final String APP = "BIKEGEOAPP";
     public static final String FAVORITES = "STATION_Favorites";
 
+    /**
+     * Constructeur de FavoritesStations
+     */
     public FavoritesStations(){
         super();
     }
 
 
-
+    /**
+     * Méthode permettant de récuperer les favoris
+     * @param context
+     * @return la liste des stations favorites
+     */
     public static ArrayList<StationsVelib> getFavorites(Context context){
         SharedPreferences sharedPref;
        List<StationsVelib> favorites;
 
         sharedPref=context.getApplicationContext().getSharedPreferences(APP,Context.MODE_PRIVATE);
 
-        if (sharedPref.contains(FAVORITES)){
+        if (sharedPref.contains(FAVORITES)){ //S'il y a des favoris
             String jsonFavorites = sharedPref.getString(FAVORITES,null);
             Gson gson = new Gson();
             StationsVelib[] favoritesStation = gson.fromJson(jsonFavorites,StationsVelib[].class);
@@ -44,6 +57,11 @@ public class FavoritesStations {
         return (ArrayList<StationsVelib>) favorites;
     }
 
+    /**
+     * Méthode permettant d'ajouter une station aux favoris
+     * @param context
+     * @param station à ajouter aux favoris
+     */
     public static void addFavorite(Context context, StationsVelib station){
         List<StationsVelib> favorites = getFavorites(context);
         if(favorites == null)
@@ -55,10 +73,14 @@ public class FavoritesStations {
 //                , Toast.LENGTH_LONG).show();
     }
 
+    /**
+     * Méthode permettant d'effacer tous les favoris
+     * @param context
+     */
     public static void removeAllFavorite(Context context){
         ArrayList<StationsVelib> favorites = getFavorites(context);
         if(favorites != null) {
-            favorites.clear();
+            favorites.clear(); //Enlever tous les favoris
             saveFavorites(context,favorites);
 //            Toast.makeText(context
 //                    , "Favoris supprimés"
@@ -66,18 +88,23 @@ public class FavoritesStations {
         }
     }
 
+    /**
+     * Méthode permettant d'enlever une station des favoris
+     * @param context
+     * @param station à enlever des favoris
+     */
     public static void removeFavorite(Context context, StationsVelib station){
         ArrayList<StationsVelib> favorites = getFavorites(context);
         StationsVelib stationToDelete=null;
-        if(favorites != null){
+        if(favorites != null){ //S'il y a des favoris
 
-            for(int i=0; i<favorites.size();++i){
-                if(favorites.get(i).getAddress().equals(station.getAddress())){
+            for(int i=0; i<favorites.size();++i){ //On regarde tous les favoris
+                if(favorites.get(i).getAddress().equals(station.getAddress())){ //Afin de trouver celui qu'on veut supprimer
                     stationToDelete=favorites.get(i);
                 }
             }
          if(stationToDelete!=null) {
-             favorites.remove(stationToDelete);
+             favorites.remove(stationToDelete); //On supprime
              saveFavorites(context, favorites);
 //             Toast.makeText(context
 //                     , "La station a été supprimée des favoris"
@@ -91,6 +118,11 @@ public class FavoritesStations {
         }
     }
 
+    /**
+     * Méthode permettant de sauvegarder les favoris
+     * @param context
+     * @param favorites que l'on souhaite sauvegarder
+     */
     public static void saveFavorites(Context context, List<StationsVelib> favorites){
         SharedPreferences sharedPref;
         SharedPreferences.Editor editor;
@@ -104,12 +136,18 @@ public class FavoritesStations {
 
     }
 
+    /**
+     * Méthode permettant de savoir si une station est dans les favoris
+     * @param station dont on cherche à savoir si elle est dans les favoris
+     * @param context
+     * @return true si ça appartient au favoris, false sinon
+     */
     public static boolean isStationInFavorites(StationsVelib station,Context context){
         ArrayList<StationsVelib> favorites = getFavorites(context);
 
         boolean isInFavorite = false;
 
-        if(favorites != null){
+        if(favorites != null){ //Si on a des favoris
             isInFavorite=searchStation(favorites,station);
         }
         else{
@@ -118,6 +156,12 @@ public class FavoritesStations {
         return isInFavorite;
     }
 
+    /**
+     * Recherche une station dans les favoris
+     * @param favorites : les favoris
+     * @param station : station à chercher
+     * @return true si la station est dans les favoris
+     */
     private static boolean searchStation(ArrayList<StationsVelib> favorites, StationsVelib station){
         boolean retour=false;
         for(int i=0; i<favorites.size();++i){

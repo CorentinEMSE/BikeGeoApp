@@ -2,7 +2,6 @@ package corentinulysse.bikegeoapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -21,15 +20,13 @@ import static corentinulysse.bikegeoapp.R.id.listView;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ListFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ListFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment affichant la liste des stations de vlib
  */
 public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
+    /*
+    Initialisation
+     */
     public static final String ARG_PAGE = "ARG_PAGE";
     private Interface mTunnel;//Interface de communication
     public static ListView mListView;
@@ -43,11 +40,19 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private boolean clickable;
 
+    /**
+     * Constructeur
+     */
     public ListFragment() {
         //keep empty
     }
 
 
+    /**
+     * Permet d'ajouter une nouvelle instance de listFragment
+     * @param page position dans le tablayout
+     * @return
+     */
     public static ListFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -56,6 +61,10 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return fragment;
     }
 
+    /**
+     * A la création du fragment
+     * @param savedInstanceState
+     */
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -63,6 +72,13 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+    /**
+     * Lorsque le fragment est crée, on initalise le swiperefreshlayout et on affiche la premièe liste dans le listview grace à manageFragment
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -71,6 +87,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         View mView = inflater.inflate(R.layout.fragment_list, container, false);
 
         mListView = (ListView) mView.findViewById(listView);
+        /*
+        Ajout d'un listener pour savoir quand on clique sur un item de la liste
+         */
         clickList(mView);
         swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.f_n_swiperefresh);
 
@@ -81,6 +100,10 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         return mView;
     }
 
+    /**
+     * Gestion du clic sur un item de la liste pour lancer l'activité détail
+     * @param mView
+     */
     public void clickList(View mView) {//Gestion du clic sur un item de la liste
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,7 +124,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
 
-
+/*
+Permet d'initialiser le tunnel
+ */
     @Override
     public void onAttach(Context context){
         super.onAttach(context);
@@ -114,13 +139,19 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         }
     }
 
+    /**
+     * Lorsque l'utilisateur souhaite emttre à jour les données, cette méthode est appelée
+     */
     public void onRefresh() {//Fonction de rafraichissement quand on swipe vers le bas
-        clickable=false;
-        setSwipeRefreshLayoutTrue();
+        clickable=false; //On ne peut plus cliquer sur les éléments de la liste
+        setSwipeRefreshLayoutTrue(); //On appelle le swiperefreshlayout
         mTunnel.sendHttpRequestFromFragment();//On relance une requete http
 
     }
 
+    /**
+     * Permet de mettre à jour l'affichage sur la listview en traitant les données issues de la requete que l'on affiche grace à un adapter
+     */
     public void manageFragment(){
         mDatalist = mTunnel.getStationList();//Récupération de la liste de stations issue de la requete
         list = new ArrayList<>();//Initialisation de list pour l'affichage
@@ -143,24 +174,33 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             Toast.makeText(getActivity(), "La liste récupérée est vide", Toast.LENGTH_SHORT).show();
         }
 
-        mAdapter= new ListSampleAdapter(getActivity(), list);
-        mListView.setAdapter(mAdapter);
+        mAdapter= new ListSampleAdapter(getActivity(), list); //Déclaration de l'adapter avec la list précédemment obtenue
+        mListView.setAdapter(mAdapter); //On affecte cet adapter à la listview pour pouvoir afficher
     }
 
+    /**
+     * Méthode affichant le swipeRefreshLayout
+     */
     public void setSwipeRefreshLayoutTrue(){
         swipeRefreshLayout.setRefreshing(true);//On lance l'animation
 
     }
 
+    /**
+     * Méthode enlevant le swipeRefreshLayout
+     */
     public void setSwipeRefreshLayoutFalse(){
         swipeRefreshLayout.setRefreshing(false);//On stoppe l'animation
 
     }
 
+    /**
+     * Méthode appelée lorsque l'on reçoit la requete http
+     */
     public void listfragmentOnHttpRequestReceived(){
-        manageFragment();
-        clickable=true;
-        setSwipeRefreshLayoutFalse();
+        manageFragment(); //On met a jour l'affichage des données
+        clickable=true; //On redonne la possibilité de cliquer sur la liste
+        setSwipeRefreshLayoutFalse(); //On enleve le swipeRefreshLayout
     }
 
 

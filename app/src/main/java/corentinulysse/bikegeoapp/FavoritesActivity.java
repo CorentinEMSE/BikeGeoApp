@@ -1,5 +1,6 @@
 package corentinulysse.bikegeoapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -7,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -48,6 +51,8 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorites);
 
+
+
         mListView = (ListView) findViewById(favorites_listView);
 
 
@@ -60,6 +65,12 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         mHttpRequest = new FavoriteHttpRequest();
 
 //        frame = (FrameLayout) findViewById(R.id.favorites_frame);
+
+//        View mView = findViewById(R.layout.fragment_list);
+
+
+        clickList();
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.favorites_swiperefresh);
 
 
@@ -75,6 +86,25 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
 
 
+    }
+
+    public void clickList() {//Gestion du clic sur un item de la liste
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(clickable) {
+                    //Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent();
+                    intent.setClass(getApplicationContext(), DetailsActivity.class);
+                    intent.putExtra("stationS", FavoritesStations.getFavorites(getApplicationContext()).get(position));
+
+
+                    startActivity(intent);
+                }
+
+            }
+        });
     }
 
     @Override
@@ -96,13 +126,13 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
     }
 
-    public void listfragmentOnHttpRequestReceived(){
-//       mTunnel.refreshFavorites();
-        manageFragment();
-//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
-        clickable=true;
-        setSwipeRefreshLayoutFalse();
-    }
+//    public void listfragmentOnHttpRequestReceived(){
+////       mTunnel.refreshFavorites();
+//        manageFragment();
+////        mAdapter.notifyDataSetChanged();//On actualise l'adapter
+//        clickable=true;
+//        setSwipeRefreshLayoutFalse();
+//    }
 
     public void httpRequestReceived(boolean requestReceived) {
 

@@ -22,6 +22,10 @@ public class FavoritesStations {
         super();
     }
 
+//    public StationsVelib getOneFavorite(Context context,int position){
+//        return getFavorites(context).get(position);
+//    }
+
     public static ArrayList<StationsVelib> getFavorites(Context context){
         SharedPreferences sharedPref;
        List<StationsVelib> favorites;

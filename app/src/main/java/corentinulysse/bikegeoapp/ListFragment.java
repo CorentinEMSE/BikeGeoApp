@@ -37,7 +37,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private ArrayList<ListSample> list = new ArrayList<>();//Entrée du SampleAdapter
     private int mPage;
     private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
-    private OnFragmentInteractionListener mListener;
+//    private OnFragmentInteractionListener mListener;
     private ListSampleAdapter mAdapter;
     private int i = 0;
 

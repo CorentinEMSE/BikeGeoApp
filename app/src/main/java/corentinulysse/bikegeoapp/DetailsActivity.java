@@ -148,7 +148,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                     FavoritesStations.removeFavorite(getApplicationContext(),mStation);
                     item.setIcon(R.drawable.ic_favorite_border_black_48dp);
                     Toast.makeText(getApplicationContext()
-                            , "Piste favorie supprimée"
+                            , "La station a été supprimée des favoris"
                             , Toast.LENGTH_LONG).show();
 
                 }

@@ -149,6 +149,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         mTunnel.sendHttpRequestFromFragment();//On relance une requete http
         mAdapter.notifyDataSetChanged();//On actualise l'adapter
         swipeRefreshLayout.setRefreshing(false);//On stoppe l'animation
+
     }
 
 //    @Override

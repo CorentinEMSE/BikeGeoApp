@@ -26,11 +26,15 @@ public class HttpRequest {
     private List<StationsVelib> stationData;
 
     public HttpRequest() {
-        this.stationData =  new ArrayList<>();;
+        this.stationData =  new ArrayList<>();
     }
 
 
     public void LaunchHttpRequest(RequestQueue requestQueue, final NavigationActivity activity, String URL) {
+
+
+            stationData.clear(); // mise a jour de la liste si nouvelle requete effectuee
+
 
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -55,6 +59,7 @@ public class HttpRequest {
                                 getStationList().add(stationRecup); // Ajout de la station dans la liste des stations à afficher
                             }
                             //Log.d("StationsInFonction :", stationData.toString());
+
 
                             Toast.makeText(activity, "Données actualisées", Toast.LENGTH_SHORT).show();
                             activity.httpRequestReceived(true);//Envoi à l'activité la notification de la réception de la requete

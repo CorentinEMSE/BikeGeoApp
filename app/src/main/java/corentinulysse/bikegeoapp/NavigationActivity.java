@@ -106,7 +106,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
 
         if(requestReceived) {
             if(mFirstRequest == false){
-                stationDataReq.clear(); // mise a jour de la liste si nouvelle requete effectuee
+//                stationDataReq.clear(); // mise a jour de la liste si nouvelle requete effectuee
             }
             stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
 

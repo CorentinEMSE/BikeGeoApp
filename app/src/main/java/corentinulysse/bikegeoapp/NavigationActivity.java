@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.google.android.gms.location.LocationListener;
@@ -32,7 +33,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
     private RequestQueue mRequestQueue;
     private HttpRequest mHttpRequest;
     private boolean mFirstRequest = false;
-    private PagerAdapter adapter=null;
+    private PagerAdapter adapter = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,39 +44,33 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         setSupportActionBar(toolbar);
 
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
-        }
-        else
-        {
-            ActivityCompat.requestPermissions(this,new String[]{
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION},1
-                    );
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, 1
+            );
 
         }
 
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)==PackageManager.PERMISSION_GRANTED){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
 
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 2);
         }
-        else
-        {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.INTERNET},2 );
-        }
-
 
 
         mFirstRequest = true;
-        stationDataReq=new ArrayList<>();
+        stationDataReq = new ArrayList<>();
 
 
-        mRequestQueue =  VolleyQueue.getInstance(NavigationActivity.this);
+        mRequestQueue = VolleyQueue.getInstance(NavigationActivity.this);
         mHttpRequest = new HttpRequest();
 
         mHttpRequest.LaunchHttpRequest(mRequestQueue, NavigationActivity.this, URL);
 
         stationDataReq = mHttpRequest.getStationList();
-
 
 
 //        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -103,15 +98,17 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         return mHttpRequest;
     }
 
-    public void httpRequestReceived(boolean requestReceived){
+    public void httpRequestReceived(boolean requestReceived) {
 
-        if(requestReceived) {
-            if(mFirstRequest == false){
+        if (requestReceived) {
+
+            stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
+            refreshFavorites();
+
+            if (mFirstRequest == false) {
 //                stationDataReq.clear(); // mise a jour de la liste si nouvelle requete effectuee
                 adapter.pagerAdapterHttpRequestReceived();
             }
-            stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
-
 
 //        // Get the ViewPager and set it's PagerAdapter so that it can display items
 //        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -133,7 +130,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
 
-                mFirstRequest=false;
+                mFirstRequest = false;
             }
         }
         return;
@@ -156,15 +153,15 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
 //    }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu,menu);
+        inflater.inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
             case R.id.action_settings:
                 //User chose the "Settings" item, show the app settings UI...
                 Intent intent = new Intent();
@@ -191,12 +188,29 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
 
     @Override
     public void sendHttpRequestFromFragment() {
-            final NavigationActivity activity = this;
-            getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
-           }
+        final NavigationActivity activity = this;
+        getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
+    }
 
     @Override
     public void onLocationChanged(Location location) {
 
+    }
+
+//    @Override
+    public void refreshFavorites() {
+        ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
+        List<StationsVelib> temp2 = getStationList();
+        FavoritesStations.removeAllFavorite(getApplicationContext());
+        for (StationsVelib station : temp) {
+            for (int i = 0; i < temp2.size(); ++i) {
+                if (station.getName().equals(temp2.get(i).getName())) {
+                    FavoritesStations.addFavorite(getApplicationContext(), temp2.get(i));
+                }
+            }
+        }
+        Toast.makeText(getApplicationContext()
+                , "Favoris actualisés"
+                , Toast.LENGTH_LONG).show();
     }
 }

@@ -11,4 +11,6 @@ public interface Interface {
     List<StationsVelib> getStationList();
 
     void sendHttpRequestFromFragment();
+
+//    void refreshFavorites();
 }

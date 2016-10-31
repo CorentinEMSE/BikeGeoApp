@@ -83,32 +83,10 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         clickList(mView);
         swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.f_n_swiperefresh);
 
-        mDatalist = mTunnel.getStationList();//Récupération de la liste de stations issue de la requete
-        list = new ArrayList<>();//Initialisation de list pour l'affichage
-        if(!mDatalist.isEmpty()) {//Si la liste n'est pas vide
-            for (StationsVelib station : mDatalist) { // Parcours des stations de velib dans la list récupérée
-                ListSample item = new ListSample(
-                        station.getStatus(),
-                        station.getBike_stands(),
-                        station.getAvailable_bike_stands(),
-                        station.getAvailable_bikes(),
-                        station.getName(),
-                        station.getPosition());
-
-                list.add(item);
-                i=i+1;
-            }
-            Log.d("NombredeStations : ", ""+i);//Nombre de stations
-        }
-        else {
-            Toast.makeText(getActivity(), "La liste récupérée est vide", Toast.LENGTH_SHORT).show();
-        }
-
-        mAdapter= new ListSampleAdapter(getActivity(), list);
-        mListView.setAdapter(mAdapter);
+        manageFragment();
 
         swipeRefreshLayout.setOnRefreshListener(this);//On rend disponible la fonction de rafraichissment
-
+        clickable=true;
         return mView;
     }
 
@@ -153,8 +131,34 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         clickable=false;
         setSwipeRefreshLayoutTrue();
         mTunnel.sendHttpRequestFromFragment();//On relance une requete http
-        mAdapter.notifyDataSetChanged();//On actualise l'adapter
+//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
 //        setSwipeRefreshLayoutFalse();
+    }
+
+    public void manageFragment(){
+        mDatalist = mTunnel.getStationList();//Récupération de la liste de stations issue de la requete
+        list = new ArrayList<>();//Initialisation de list pour l'affichage
+        if(!mDatalist.isEmpty()) {//Si la liste n'est pas vide
+            for (StationsVelib station : mDatalist) { // Parcours des stations de velib dans la list récupérée
+                ListSample item = new ListSample(
+                        station.getStatus(),
+                        station.getBike_stands(),
+                        station.getAvailable_bike_stands(),
+                        station.getAvailable_bikes(),
+                        station.getName(),
+                        station.getPosition());
+
+                list.add(item);
+                i=i+1;
+            }
+            Log.d("NombredeStations : ", ""+i);//Nombre de stations
+        }
+        else {
+            Toast.makeText(getActivity(), "La liste récupérée est vide", Toast.LENGTH_SHORT).show();
+        }
+
+        mAdapter= new ListSampleAdapter(getActivity(), list);
+        mListView.setAdapter(mAdapter);
     }
 
     public void setSwipeRefreshLayoutTrue(){
@@ -168,6 +172,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void listfragmentOnHttpRequestReceived(){
+//       mTunnel.refreshFavorites();
+        manageFragment();
+//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
         clickable=true;
         setSwipeRefreshLayoutFalse();
     }

@@ -114,7 +114,7 @@ public class FavoritesActivity extends AppCompatActivity {
                 manageFragment();
                 mAdapter.notifyDataSetChanged();
                 Toast.makeText(getApplicationContext()
-                        , "Favoris supprimés et notifés"
+                        , "Favoris supprimés"/* et notifés"*/
                         , Toast.LENGTH_LONG).show();
 
 

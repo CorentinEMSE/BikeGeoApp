@@ -147,12 +147,18 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
                     //Remove Favorite
                     FavoritesStations.removeFavorite(getApplicationContext(),mStation);
                     item.setIcon(R.drawable.ic_favorite_border_black_48dp);
+                    Toast.makeText(getApplicationContext()
+                            , "Piste favorie supprimée"
+                            , Toast.LENGTH_LONG).show();
 
                 }
                 else{
                     //Add Favorite
                     FavoritesStations.addFavorite(getApplicationContext(),mStation);
                     item.setIcon(R.drawable.ic_favorite_black_48dp);
+                    Toast.makeText(getApplicationContext()
+                            , "La station a été ajoutée en tant que favorite"
+                            , Toast.LENGTH_LONG).show();
 
 
                 }

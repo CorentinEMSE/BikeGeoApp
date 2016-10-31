@@ -2,7 +2,6 @@ package corentinulysse.bikegeoapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -49,9 +48,9 @@ public class FavoritesStations {
             favorites = new ArrayList<StationsVelib>();
         favorites.add(station);
         saveFavorites(context, favorites);
-        Toast.makeText(context
-                , "La station a été ajoutée en tant que favorite"
-                , Toast.LENGTH_LONG).show();
+//        Toast.makeText(context
+//                , "La station a été ajoutée en tant que favorite"
+//                , Toast.LENGTH_LONG).show();
     }
 
     public static void removeAllFavorite(Context context){
@@ -59,9 +58,9 @@ public class FavoritesStations {
         if(favorites != null) {
             favorites.clear();
             saveFavorites(context,favorites);
-            Toast.makeText(context
-                    , "Favoris supprimés"
-                    , Toast.LENGTH_LONG).show();
+//            Toast.makeText(context
+//                    , "Favoris supprimés"
+//                    , Toast.LENGTH_LONG).show();
         }
     }
 
@@ -78,14 +77,14 @@ public class FavoritesStations {
          if(stationToDelete!=null) {
              favorites.remove(stationToDelete);
              saveFavorites(context, favorites);
-             Toast.makeText(context
-                     , "Piste favorie supprimée"
-                     , Toast.LENGTH_LONG).show();
+//             Toast.makeText(context
+//                     , "Piste favorie supprimée"
+//                     , Toast.LENGTH_LONG).show();
          }
             else{
-             Toast.makeText(context
-                     , "Piste favorie non supprimée"
-                     , Toast.LENGTH_LONG).show();
+//             Toast.makeText(context
+//                     , "Piste favorie non supprimée"
+//                     , Toast.LENGTH_LONG).show();
          }
         }
     }

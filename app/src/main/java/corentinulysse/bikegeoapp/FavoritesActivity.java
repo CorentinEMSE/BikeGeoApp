@@ -1,6 +1,7 @@
 package corentinulysse.bikegeoapp;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -10,12 +11,17 @@ import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static corentinulysse.bikegeoapp.R.id.favorites_listView;
 
-public class FavoritesActivity extends AppCompatActivity {
+public class FavoritesActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener{
+
+    private static String URL = "http://opendata.paris.fr/explore/dataset/stations-velib-disponibilites-en-temps-reel/download/?format=geojson&timezone=Europe/Berlin";
+
 
     private List<StationsVelib> mList;
     private FrameLayout frame;
@@ -23,6 +29,18 @@ public class FavoritesActivity extends AppCompatActivity {
     private ListView mListView;
     private ArrayList<ListSample> list = new ArrayList<>();//Entrée du SampleAdapter
     private ListSampleAdapter mAdapter;
+    private boolean clickable;
+    private List<StationsVelib> stationDataReq;
+
+    private RequestQueue mRequestQueue;
+    private FavoriteHttpRequest mHttpRequest;
+
+
+
+
+//    private Interface mTunnel;
+    private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
+
 
 
     @Override
@@ -38,17 +56,81 @@ public class FavoritesActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mRequestQueue = VolleyQueue.getInstance(FavoritesActivity.this);
+        mHttpRequest = new FavoriteHttpRequest();
+
 //        frame = (FrameLayout) findViewById(R.id.favorites_frame);
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.favorites_swiperefresh);
+
 
 
         manageFragment();
 
 
 
+        swipeRefreshLayout.setOnRefreshListener(this);//On rend disponible la fonction de rafraichissment
+
+        clickable=true;
 
 
 
 
+    }
+
+    @Override
+    public void onRefresh() {
+        clickable=false;
+        setSwipeRefreshLayoutTrue();
+        mHttpRequest.LaunchHttpRequest(mRequestQueue, FavoritesActivity.this, URL);
+
+//        mTunnel.sendHttpRequestFromFragment();
+    }
+
+    public void setSwipeRefreshLayoutTrue(){
+        swipeRefreshLayout.setRefreshing(true);//On lance l'animation
+
+    }
+
+    public void setSwipeRefreshLayoutFalse(){
+        swipeRefreshLayout.setRefreshing(false);//On stoppe l'animation
+
+    }
+
+    public void listfragmentOnHttpRequestReceived(){
+//       mTunnel.refreshFavorites();
+        manageFragment();
+//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
+        clickable=true;
+        setSwipeRefreshLayoutFalse();
+    }
+
+    public void httpRequestReceived(boolean requestReceived) {
+
+        if (requestReceived) {
+
+            stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
+            refreshFavorites();
+            manageFragment();
+            clickable=true;
+           setSwipeRefreshLayoutFalse();
+
+        }
+        return;
+    }
+
+    public void refreshFavorites() {
+        ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
+        FavoritesStations.removeAllFavorite(getApplicationContext());
+        for (StationsVelib station : temp) {
+            for (int i = 0; i < stationDataReq.size(); ++i) {
+                if (station.getName().equals(stationDataReq.get(i).getName())) {
+                    FavoritesStations.addFavorite(getApplicationContext(), stationDataReq.get(i));
+                }
+            }
+        }
+//        Toast.makeText(getApplicationContext()
+//                , "Favoris actualisés"
+//                , Toast.LENGTH_LONG).show();
     }
 
 

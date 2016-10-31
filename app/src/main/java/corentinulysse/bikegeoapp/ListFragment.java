@@ -101,6 +101,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
                     intent.setClass(getActivity(), DetailsActivity.class);
                     intent.putExtra("stationS", mDatalist.get(position));
 
+
                     startActivity(intent);
                 }
 

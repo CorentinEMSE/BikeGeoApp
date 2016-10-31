@@ -210,7 +210,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             //TODO A voir si on ajoute un test sur l'unicité du marker
 
             //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
-            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()).snippet("Velib' disponibles : " + mStation.getAvailable_bikes() + " et Places disponibles : " + mStation.getAvailable_bike_stands()));
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()));
 
 
 

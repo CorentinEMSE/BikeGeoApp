@@ -1,6 +1,7 @@
 package corentinulysse.bikegeoapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -55,6 +57,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
     private ProgressBar mProgressBar;
     private TextView mMessageChargement;
+
 
     public Map2Fragment() {
 
@@ -112,6 +115,29 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         mGoogleMap = googleMap;
 
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
+
+        mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                String name=marker.getTitle();
+                StationsVelib stationATransmettre=null;
+                for (int i = 0; i < mDataListe.size(); ++i) {
+                    StationsVelib temp=mDataListe.get(i);
+                    if (name.equals(temp.getName())){
+                        stationATransmettre=temp;
+                    }
+                }
+                if(stationATransmettre!=null) {
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), DetailsActivity.class);
+                    intent.putExtra("stationS", stationATransmettre);
+
+
+                    startActivity(intent);
+                }
+            }
+        });
 
 
         //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -340,6 +366,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
         Toast.makeText(getActivity(), "Map mise à jour", Toast.LENGTH_SHORT).show();
     }
+
 
 
 

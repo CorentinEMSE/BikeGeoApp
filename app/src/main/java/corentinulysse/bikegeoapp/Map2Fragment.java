@@ -167,7 +167,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
             //TODO A voir si on ajoute un test sur l'unicité du marker
 
             //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
-            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Velib' disponibles : " + dataCourante.getAvailable_bikes() + " et Places disponibles : " + dataCourante.getAvailable_bike_stands()));
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Adresse :" + dataCourante.getAddress()));
 
         }
 
@@ -287,6 +287,58 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
                 String.valueOf(longitude),String.valueOf(altitude), String.valueOf(accuracy));
         Toast.makeText(this.getContext(), msg, Toast.LENGTH_LONG).show();
 
+    }
+
+    public void map2fragmentOnHttpRequestReceived(){
+//       mTunnel.refreshFavorites();
+        manageFragment();
+//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
+
+    }
+
+    public void manageFragment(){
+
+
+        mMessageChargement.setText("La carte est en cours de chargement ...");
+
+        mProgressBar.setVisibility(View.VISIBLE);
+        mProgressBar.setIndeterminate(false);
+        mProgressBar.setProgress(0);
+        mProgressBar.setMax(mDataListe.size());
+
+        mTargetItem = 0;
+        mDataListe = mTunnel.getStationList();
+
+
+        double[] tempInit = mDataListe.get(mTargetItem).getPosition();
+        mTargetMarker = new LatLng(tempInit[0], tempInit[1]);
+
+        mGoogleMap.clear();
+
+        for (StationsVelib dataCourante : mDataListe) {
+            LatLng latCourante = new LatLng(dataCourante.getPosition()[0], dataCourante.getPosition()[1]);
+
+            //TODO A voir si on ajoute un test sur l'unicité du marker
+
+            //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
+            mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Vélibs disponibles : " + dataCourante.getAvailable_bikes()+" et supports disponibles : "+dataCourante.getAvailable_bike_stands()));
+
+        }
+
+        mMessageChargement.setText("");
+        mProgressBar.setVisibility(View.GONE);
+
+        // Add a marker in Sydney and move the camera
+//        LatLng sydney = new LatLng(-34, 151);
+//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        //LatLng gardanne=new LatLng(-43.45,5.4667);
+        //mGoogleMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
+
+        CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
+        mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+        Toast.makeText(getActivity(), "Map mise à jour", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -73,7 +73,7 @@ public class HttpRequest {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         activity.httpRequestReceived(false);
-                        Toast.makeText(activity, "Impossible de récupérer les données", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity, "Impossible de récupérer les données, veuillez retourner à l'écran d'accueil et réessayer", Toast.LENGTH_SHORT).show();
 
                     }
                 });

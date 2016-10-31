@@ -16,6 +16,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     private String tabTitles[] = new String[] { "Liste", "Carte", "Info" };
     private Context context;
     private ListFragment tab1;
+    private Map2Fragment tab2;
 
 
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
@@ -37,7 +38,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
                  tab1 = ListFragment.newInstance(position+1);
                 return tab1;
             case 1:
-                Map2Fragment tab2 = new Map2Fragment();
+                 tab2 = new Map2Fragment();
                 //MapFragment mMapFragment= MapFragment.newInstance();
                 return tab2;
             case 2:
@@ -72,5 +73,6 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
     public void pagerAdapterHttpRequestReceived(){
         tab1.listfragmentOnHttpRequestReceived();
+        tab2.map2fragmentOnHttpRequestReceived();
     }
 }

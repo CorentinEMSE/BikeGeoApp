@@ -47,14 +47,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         //keep empty
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param page Parameter 1.
-     * @return A new instance of fragment ListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
+
     public static ListFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -109,12 +102,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         });
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+
 
     @Override
     public void onAttach(Context context){
@@ -196,10 +184,9 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+//    public interface OnFragmentInteractionListener {
+//         void onFragmentInteraction(Uri uri);
+//    }
 
 
 }

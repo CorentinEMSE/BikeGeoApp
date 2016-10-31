@@ -198,15 +198,10 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
             list = new ArrayList<>();
             mAdapter= new ListSampleAdapter(this, list);
             mListView.setAdapter(mAdapter);
-            //TODO ERREUR
+
         }
 
-        //TODO METTRE LE FRAGMENT DANS LE FRAME LAYOUT
 
-//        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//        ft.replace(R.id.favorites_frame,listFragment);
-//        ft.addToBackStack(null);
-//        ft.commit();
     }
 
     @Override

@@ -185,15 +185,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         //For showing a move to my location button
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
 
-            // return;
         }
 
 //        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
@@ -207,9 +199,9 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
             LatLng latCourante = new LatLng(mStation.getPosition()[0], mStation.getPosition()[1]);
 
-            //TODO A voir si on ajoute un test sur l'unicité du marker
+            // A voir si on ajoute un test sur l'unicité du marker ==> NON CAR PAS DE DOUBLON
 
-            //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
+
             mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()));
 
 
@@ -237,14 +229,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         lm = (LocationManager)getSystemService(LOCATION_SERVICE);
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
             if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-//                return;
+
             }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, (android.location.LocationListener) this);
         if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
@@ -258,14 +243,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         super.onPause();
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
+
         }
         lm.removeUpdates((android.location.LocationListener) this);
     }

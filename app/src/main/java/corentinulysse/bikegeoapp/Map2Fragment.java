@@ -141,48 +141,14 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         });
 
 
-        //mGoogleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-
-//        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
-
-
-//        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//            // TODO: Consider calling
-//            //    ActivityCompat#requestPermissions
-//            // here to request the missing permissions, and then overriding
-//            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-//            //                                          int[] grantResults)
-//            // to handle the case where the user grants the permission. See the documentation
-//            // for ActivityCompat#requestPermissions for more details.
-//            return;
-//        }
 
         //For showing a move to my location button
         if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
 
-            // return;
         }
 
-//        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-//
-//        }
+
         mGoogleMap.setMyLocationEnabled(true);
 
 
@@ -191,9 +157,9 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         for (StationsVelib dataCourante : mDataListe) {
             LatLng latCourante = new LatLng(dataCourante.getPosition()[0], dataCourante.getPosition()[1]);
 
-            //TODO A voir si on ajoute un test sur l'unicité du marker
 
-            //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
+
+
             mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Adresse :" + dataCourante.getAddress()));
 
         }
@@ -234,14 +200,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
             lm = (LocationManager) getContext().getSystemService(LOCATION_SERVICE);
         if (lm.isProviderEnabled(LocationManager.GPS_PROVIDER))
             if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-//                return;
+
             }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 0, (android.location.LocationListener) this);
         if(lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
@@ -255,14 +214,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         super.onPause();
 
         if (ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-//            return;
+
         }
         lm.removeUpdates((android.location.LocationListener) this);
     }
@@ -345,9 +297,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         for (StationsVelib dataCourante : mDataListe) {
             LatLng latCourante = new LatLng(dataCourante.getPosition()[0], dataCourante.getPosition()[1]);
 
-            //TODO A voir si on ajoute un test sur l'unicité du marker
 
-            //TODO Verifier getName fonctionne (Name ajouté il y a peu) et ajouter Name dans la liste
             mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(dataCourante.getName()).snippet("Vélibs disponibles : " + dataCourante.getAvailable_bikes()+" et supports disponibles : "+dataCourante.getAvailable_bike_stands()));
 
         }

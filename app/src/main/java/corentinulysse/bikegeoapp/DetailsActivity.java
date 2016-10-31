@@ -45,8 +45,6 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
     private Menu mMenu;
     private GoogleMap mGoogleMap;
 
-//    private ProgressBar mProgressBar;
-//    private TextView mMessageChargement;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +60,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-//        Button boutonBack = (Button) findViewById(R.id.a_d_bBack);
+
 
         TextView name = (TextView) findViewById(R.id.a_d_name);
         TextView status = (TextView) findViewById(R.id.a_d_status);
@@ -77,12 +75,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
             mStation = (StationsVelib) getIntent().getSerializableExtra("stationS"); //Obtaining data
         }
         Log.d("Coucou : ", mStation.toString());
-//        boutonBack.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                DetailsActivity.this.finish();
-//            }
-//        });
+
 
         //Nom
         name.setText(mStation.getName());
@@ -188,9 +181,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
         }
 
-//        if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
-//
-//        }
+
         mGoogleMap.setMyLocationEnabled(true);
 
 
@@ -199,27 +190,17 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
 
             LatLng latCourante = new LatLng(mStation.getPosition()[0], mStation.getPosition()[1]);
 
-            // A voir si on ajoute un test sur l'unicité du marker ==> NON CAR PAS DE DOUBLON
+
 
 
             mGoogleMap.addMarker(new MarkerOptions().position(latCourante).title(mStation.getName()));
 
 
 
-//        mMessageChargement.setText("");
-//        mProgressBar.setVisibility(View.GONE);
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        //LatLng gardanne=new LatLng(-43.45,5.4667);
-        //mGoogleMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
-
         CameraPosition cameraPosition = new CameraPosition.Builder().target(latCourante).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mTargetMarker));
+
 
     }
     @Override

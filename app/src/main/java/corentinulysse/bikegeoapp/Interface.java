@@ -12,5 +12,4 @@ public interface Interface {
 
     void sendHttpRequestFromFragment();
 
-//    void refreshFavorites();
 }

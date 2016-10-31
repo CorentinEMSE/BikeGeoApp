@@ -73,23 +73,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         stationDataReq = mHttpRequest.getStationList();
 
 
-//        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-//        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-//            @Override
-//            public void onTabSelected(TabLayout.Tab tab) {
-//                viewPager.setCurrentItem(tab.getPosition());
-//            }
-//
-//            @Override
-//            public void onTabUnselected(TabLayout.Tab tab) {
-//
-//            }
-//
-//            @Override
-//            public void onTabReselected(TabLayout.Tab tab) {
-//
-//            }
-//        });
+
 
 
     }
@@ -106,18 +90,11 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
             refreshFavorites();
 
             if (mFirstRequest == false) {
-//                stationDataReq.clear(); // mise a jour de la liste si nouvelle requete effectuee
+
                 adapter.pagerAdapterHttpRequestReceived();
             }
 
-//        // Get the ViewPager and set it's PagerAdapter so that it can display items
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-//        viewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),
-//                NagivationActivity.this));
-//
-//        // Give the TabLayout the ViewPager
-//        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-//        tabLayout.setupWithViewPager(viewPager);
+
             if (mFirstRequest) {
                 TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
                 tabLayout.addTab(tabLayout.newTab());
@@ -136,21 +113,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         return;
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        int id = item.getItemId();
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,14 +129,12 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
                 //User chose the "Settings" item, show the app settings UI...
                 Intent intent = new Intent();
                 intent.setClass(NavigationActivity.this, FavoritesActivity.class);
-//                intent.putExtra("stationS", mDatalist.get(position));
+
 
                 startActivity(intent);
 
                 return true;
-//            case R.id.action_favorite:
-//                //User chose the "Favorite" action, mark the current item as favorite...
-//                return true;
+
             default: //If we got here, the user's action was not recognized.
                 //Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);
@@ -197,7 +158,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
 
     }
 
-//    @Override
+
     public void refreshFavorites() {
         ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
         List<StationsVelib> temp2 = getStationList();

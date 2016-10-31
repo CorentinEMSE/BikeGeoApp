@@ -37,7 +37,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     private ArrayList<ListSample> list = new ArrayList<>();//Entrée du SampleAdapter
     private int mPage;
     private SwipeRefreshLayout swipeRefreshLayout;//Rafraichissement
-//    private OnFragmentInteractionListener mListener;
+
     private ListSampleAdapter mAdapter;
     private int i = 0;
 
@@ -66,12 +66,10 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-     //return inflater.inflate(R.layout.fragment_list, container, false);
+
 
         View mView = inflater.inflate(R.layout.fragment_list, container, false);
-//        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
-//        textView.setText("Ici sera la liste");
+
         mListView = (ListView) mView.findViewById(listView);
         clickList(mView);
         swipeRefreshLayout = (SwipeRefreshLayout) mView.findViewById(R.id.f_n_swiperefresh);
@@ -89,7 +87,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if(clickable) {
-                    //Toast.makeText(getActivity(), "Item : "+mDatalist.get(position).getName(), Toast.LENGTH_SHORT).show();
+
                     Intent intent = new Intent();
                     intent.setClass(getActivity(), DetailsActivity.class);
                     intent.putExtra("stationS", mDatalist.get(position));
@@ -120,8 +118,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         clickable=false;
         setSwipeRefreshLayoutTrue();
         mTunnel.sendHttpRequestFromFragment();//On relance une requete http
-//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
-//        setSwipeRefreshLayoutFalse();
+
     }
 
     public void manageFragment(){
@@ -161,32 +158,12 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     }
 
     public void listfragmentOnHttpRequestReceived(){
-//       mTunnel.refreshFavorites();
         manageFragment();
-//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
         clickable=true;
         setSwipeRefreshLayoutFalse();
     }
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-//    public interface OnFragmentInteractionListener {
-//         void onFragmentInteraction(Uri uri);
-//    }
 
 
 }

@@ -22,9 +22,7 @@ public class FavoritesStations {
         super();
     }
 
-//    public StationsVelib getOneFavorite(Context context,int position){
-//        return getFavorites(context).get(position);
-//    }
+
 
     public static ArrayList<StationsVelib> getFavorites(Context context){
         SharedPreferences sharedPref;
@@ -82,12 +80,12 @@ public class FavoritesStations {
              favorites.remove(stationToDelete);
              saveFavorites(context, favorites);
 //             Toast.makeText(context
-//                     , "Piste favorie supprimée"
+//                     , "La station a été supprimée des favoris"
 //                     , Toast.LENGTH_LONG).show();
          }
             else{
 //             Toast.makeText(context
-//                     , "Piste favorie non supprimée"
+//                     , "La station n'a pas pu être supprimée"
 //                     , Toast.LENGTH_LONG).show();
          }
         }

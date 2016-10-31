@@ -58,7 +58,7 @@ public class FavoriteHttpRequest {
 
                                 getStationList().add(stationRecup); // Ajout de la station dans la liste des stations à afficher
                             }
-                            //Log.d("StationsInFonction :", stationData.toString());
+
 
 
                             Toast.makeText(activity, "Données actualisées", Toast.LENGTH_SHORT).show();

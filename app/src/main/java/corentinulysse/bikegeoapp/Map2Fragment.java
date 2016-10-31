@@ -76,7 +76,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         double[] tempInit = mDataListe.get(mTargetItem).getPosition();
         mTargetMarker = new LatLng(tempInit[0], tempInit[1]);
 
-        // mMapView = (MapView)rootView.findViewById()
+
 
         mMessageChargement = (TextView) rootView.findViewById(R.id.f_Map2Fragment_messageMapChargement);
         mMessageChargement.setText("La carte est en cours de chargement ...");
@@ -87,14 +87,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         mProgressBar.setProgress(0);
         mProgressBar.setMax(mDataListe.size());
 
-        //public final class MapsInitializer extends Object
-        // Use this class to initialize the Google Maps Android API if features need to be used before obtaining a map. It must be called because some classes such as BitmapDescriptorFactory and CameraUpdateFactory need to be initialized.
-        //If you are using MapFragment or MapView and have already obtained a (non-null) GoogleMap by calling getMapAsync() on either of these classes and waiting for the onMapReady(GoogleMap map) callback, then you do not need to worry about this class.
 
-        //MapsInitializer.initialize(getActivity().getApplicationContext());
-
-//        LocationManager lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-//        lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,0,0,this);
 
         return rootView;
     }
@@ -167,17 +160,12 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         mMessageChargement.setText("");
         mProgressBar.setVisibility(View.GONE);
 
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        //LatLng gardanne=new LatLng(-43.45,5.4667);
-        //mGoogleMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
+
 
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
-        // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(mTargetMarker));
+
     }
 
     @Override
@@ -269,9 +257,9 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
     }
 
     public void map2fragmentOnHttpRequestReceived(){
-//       mTunnel.refreshFavorites();
+
         manageFragment();
-//        mAdapter.notifyDataSetChanged();//On actualise l'adapter
+
 
     }
 
@@ -305,12 +293,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         mMessageChargement.setText("");
         mProgressBar.setVisibility(View.GONE);
 
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-        //LatLng gardanne=new LatLng(-43.45,5.4667);
-        //mGoogleMap.addMarker(new MarkerOptions().position(gardanne).title("Mines St Etienne").snippet("QG des ISMINs")/*.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_call_received_black_24dp))*/);
+
 
         CameraPosition cameraPosition = new CameraPosition.Builder().target(mTargetMarker).zoom(15).build();
         mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -325,56 +308,3 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
 
 
 
-//import android.support.v4.app.Fragment;
-//import android.os.Bundle;
-//import android.support.annotation.Nullable;
-//import android.view.LayoutInflater;
-//import android.view.View;
-//import android.view.ViewGroup;
-//
-//import com.google.android.gms.maps.CameraUpdateFactory;
-//import com.google.android.gms.maps.GoogleMap;
-//import com.google.android.gms.maps.OnMapReadyCallback;
-//import com.google.android.gms.maps.SupportMapFragment;
-//import com.google.android.gms.maps.model.LatLng;
-//import com.google.android.gms.maps.model.MarkerOptions;
-//
-//public class Map2Fragment extends Fragment implements OnMapReadyCallback {
-//    private GoogleMap mGoogleMap;
-//    public static Map2Fragment newInstance() {
-//        Map2Fragment fragment = new Map2Fragment();
-//        return fragment;
-//    }
-//
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        View view = inflater.inflate(R.layout.fragment_map2, null, false);
-//
-//        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
-//
-//        return view;
-//    }
-//
-//
-//    /**
-//     * Manipulates the map once available.
-//     * This callback is triggered when the map is ready to be used.
-//     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-//     * we just add a marker near Sydney, Australia.
-//     * If Google Play services is not installed on the device, the user will be prompted to install
-//     * it inside the SupportMapFragment. This method will only be triggered once the user has
-//     * installed Google Play services and returned to the app.
-//     */
-//    @Override
-//    public void onMapReady(GoogleMap googleMap) {
-//        mGoogleMap = googleMap;
-//
-//        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-//    }
-//}

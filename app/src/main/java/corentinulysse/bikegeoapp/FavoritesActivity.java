@@ -64,9 +64,6 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         mRequestQueue = VolleyQueue.getInstance(FavoritesActivity.this);
         mHttpRequest = new FavoriteHttpRequest();
 
-//        frame = (FrameLayout) findViewById(R.id.favorites_frame);
-
-//        View mView = findViewById(R.layout.fragment_list);
 
 
         clickList();
@@ -113,7 +110,7 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         setSwipeRefreshLayoutTrue();
         mHttpRequest.LaunchHttpRequest(mRequestQueue, FavoritesActivity.this, URL);
 
-//        mTunnel.sendHttpRequestFromFragment();
+
     }
 
     public void setSwipeRefreshLayoutTrue(){
@@ -126,13 +123,7 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
     }
 
-//    public void listfragmentOnHttpRequestReceived(){
-////       mTunnel.refreshFavorites();
-//        manageFragment();
-////        mAdapter.notifyDataSetChanged();//On actualise l'adapter
-//        clickable=true;
-//        setSwipeRefreshLayoutFalse();
-//    }
+
 
     public void httpRequestReceived(boolean requestReceived) {
 
@@ -160,9 +151,7 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
                 }
             }
         }
-//        Toast.makeText(getApplicationContext()
-//                , "Favoris actualisés"
-//                , Toast.LENGTH_LONG).show();
+
     }
 
 
@@ -171,7 +160,7 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
         ArrayList<StationsVelib> list2 = FavoritesStations.getFavorites(getApplicationContext());
         mList = list2;
         if(mList.size() > 0) {
-//
+
             list = new ArrayList<>();//Initialisation de list pour l'affichage
             if(!mList.isEmpty()) {//Si la liste n'est pas vide
                 for (StationsVelib station : mList) { // Parcours des stations de velib dans la list récupérée
@@ -229,9 +218,6 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
 
 
                 return true;
-//            case R.id.action_favorite:
-//                //User chose the "Favorite" action, mark the current item as favorite...
-//                return true;
             default: //If we got here, the user's action was not recognized.
                 //Invoke the superclass to handle it.
                 return super.onOptionsItemSelected(item);

@@ -202,10 +202,12 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
         List<StationsVelib> temp2 = getStationList();
         FavoritesStations.removeAllFavorite(getApplicationContext());
-        for (StationsVelib station : temp) {
-            for (int i = 0; i < temp2.size(); ++i) {
-                if (station.getName().equals(temp2.get(i).getName())) {
-                    FavoritesStations.addFavorite(getApplicationContext(), temp2.get(i));
+        if(temp!=null) {
+            for (StationsVelib station : temp) {
+                for (int i = 0; i < temp2.size(); ++i) {
+                    if (station.getName().equals(temp2.get(i).getName())) {
+                        FavoritesStations.addFavorite(getApplicationContext(), temp2.get(i));
+                    }
                 }
             }
         }

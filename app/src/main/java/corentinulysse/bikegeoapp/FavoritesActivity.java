@@ -151,10 +151,12 @@ public class FavoritesActivity extends AppCompatActivity implements SwipeRefresh
     public void refreshFavorites() {
         ArrayList<StationsVelib> temp = FavoritesStations.getFavorites(getApplicationContext());
         FavoritesStations.removeAllFavorite(getApplicationContext());
-        for (StationsVelib station : temp) {
-            for (int i = 0; i < stationDataReq.size(); ++i) {
-                if (station.getName().equals(stationDataReq.get(i).getName())) {
-                    FavoritesStations.addFavorite(getApplicationContext(), stationDataReq.get(i));
+        if(temp!=null) {
+            for (StationsVelib station : temp) {
+                for (int i = 0; i < stationDataReq.size(); ++i) {
+                    if (station.getName().equals(stationDataReq.get(i).getName())) {
+                        FavoritesStations.addFavorite(getApplicationContext(), stationDataReq.get(i));
+                    }
                 }
             }
         }

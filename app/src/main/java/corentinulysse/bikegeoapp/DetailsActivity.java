@@ -180,7 +180,7 @@ public class DetailsActivity extends AppCompatActivity implements OnMapReadyCall
         mGoogleMap = googleMap;
 
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
-
+        mGoogleMap.getUiSettings().setCompassEnabled(true);
 
 
         //For showing a move to my location button

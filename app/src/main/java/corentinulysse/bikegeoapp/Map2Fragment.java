@@ -115,6 +115,7 @@ public class Map2Fragment extends Fragment implements OnMapReadyCallback, androi
         mGoogleMap = googleMap;
 
         mGoogleMap.getUiSettings().setZoomControlsEnabled(true);
+        mGoogleMap.getUiSettings().setCompassEnabled(true);
 
 
         mGoogleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {

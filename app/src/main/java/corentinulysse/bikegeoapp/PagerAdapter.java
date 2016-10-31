@@ -15,6 +15,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     final int PAGE_COUNT=3;
     private String tabTitles[] = new String[] { "Liste", "Carte", "Info" };
     private Context context;
+    private ListFragment tab1;
 
 
     public PagerAdapter(FragmentManager fm, int NumOfTabs) {
@@ -33,7 +34,7 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                ListFragment tab1 = ListFragment.newInstance(position+1);
+                 tab1 = ListFragment.newInstance(position+1);
                 return tab1;
             case 1:
                 Map2Fragment tab2 = new Map2Fragment();
@@ -67,5 +68,9 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         // Generate title based on item position
         return tabTitles[position];
+    }
+
+    public void pagerAdapterHttpRequestReceived(){
+        tab1.listfragmentOnHttpRequestReceived();
     }
 }

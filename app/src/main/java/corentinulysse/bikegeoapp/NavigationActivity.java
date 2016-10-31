@@ -32,6 +32,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
     private RequestQueue mRequestQueue;
     private HttpRequest mHttpRequest;
     private boolean mFirstRequest = false;
+    private PagerAdapter adapter=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
         if(requestReceived) {
             if(mFirstRequest == false){
 //                stationDataReq.clear(); // mise a jour de la liste si nouvelle requete effectuee
+                adapter.pagerAdapterHttpRequestReceived();
             }
             stationDataReq = mHttpRequest.getStationList();//Recuperation de la liste des Stations de la requete
 
@@ -127,7 +129,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
                 tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
                 final ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-                final PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
+                adapter = new PagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount(), NavigationActivity.this);
                 viewPager.setAdapter(adapter);
                 tabLayout.setupWithViewPager(viewPager);
 
@@ -191,7 +193,7 @@ public class NavigationActivity extends AppCompatActivity implements Interface, 
     public void sendHttpRequestFromFragment() {
             final NavigationActivity activity = this;
             getHttpRequest().LaunchHttpRequest(mRequestQueue, activity, URL);
-    }
+           }
 
     @Override
     public void onLocationChanged(Location location) {

@@ -28,7 +28,7 @@ import static corentinulysse.bikegeoapp.R.id.listView;
  * Use the {@link ListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+public class FavoriteFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private Interface mTunnel;//Interface de communication
@@ -43,7 +43,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     private boolean clickable;
 
-    public ListFragment() {
+    public FavoriteFragment() {
         //keep empty
     }
 
@@ -74,7 +74,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-     //return inflater.inflate(R.layout.fragment_list, container, false);
+        //return inflater.inflate(R.layout.fragment_list, container, false);
 
         View mView = inflater.inflate(R.layout.fragment_list, container, false);
 //        TextView textView = (TextView) view; //Fonctionne seulement si la vue est composée seulement d'un textView. Sinon il faudra voir comment récuperer/modifier le texte
@@ -154,7 +154,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
         setSwipeRefreshLayoutTrue();
         mTunnel.sendHttpRequestFromFragment();//On relance une requete http
         mAdapter.notifyDataSetChanged();//On actualise l'adapter
-//        setSwipeRefreshLayoutFalse();
+        setSwipeRefreshLayoutFalse();
     }
 
     public void setSwipeRefreshLayoutTrue(){
@@ -167,10 +167,7 @@ public class ListFragment extends Fragment implements SwipeRefreshLayout.OnRefre
 
     }
 
-    public void listfragmentOnHttpRequestReceived(){
-        clickable=true;
-        setSwipeRefreshLayoutFalse();
-    }
+
 
 //    @Override
 //    public void onDetach() {
